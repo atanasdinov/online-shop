@@ -14,13 +14,13 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @ComponentScan(basePackages = "project")
 public class WebConfig  extends WebMvcConfigurerAdapter {
+
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setViewClass(JstlView.class);
         viewResolver.setPrefix("/WEB-INF/classes/templates/");
         viewResolver.setSuffix(".html");
-
         return viewResolver;
     }
 
