@@ -1,0 +1,4 @@
+project\controller\HomeController.class
+project\configuration\WebConfig.class
+project\model\User.class
+project\configuration\WebInit.class
