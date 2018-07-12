@@ -1,19 +1,41 @@
 package project.model;
 
-public class Product {
+import javax.persistence.*;
+import java.util.List;
 
-    private String price;
+@Entity
+@Table(name = "products")
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private Double price;
     private byte[] picture;
-    private String category;
+    @ManyToOne(targetEntity = Category.class)
+    private Category category;
     private String name;
     private String rating;
     private Integer quantity;
+    @ManyToOne(targetEntity = Cart.class)
+    private Cart cart;
 
-    public String getPrice() {
+    public Product() {
+    }
+
+    public Product(Double price, String name) {
+        this.price = price;
+        this.name = name;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -25,11 +47,11 @@ public class Product {
         this.picture = picture;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
@@ -55,5 +77,13 @@ public class Product {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }
