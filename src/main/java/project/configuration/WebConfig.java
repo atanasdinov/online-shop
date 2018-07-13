@@ -14,7 +14,9 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
@@ -31,7 +33,7 @@ import java.util.Properties;
 @EnableWebMvc
 @EnableTransactionManagement
 @ComponentScan(basePackages = "project")
-@PropertySource("classpath:application.properties")
+@PropertySource("/WEB-INF/resources/application.properties")
 @EnableJpaRepositories(basePackages = { "com.scalefocus.repository" })
 
 public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
@@ -108,9 +110,14 @@ public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
     private ITemplateResolver templateResolver() {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
         resolver.setApplicationContext(applicationContext);
-        resolver.setPrefix("/WEB-INF/classes/templates/");
+        resolver.setPrefix("/WEB-INF/resources/templates/");
         resolver.setSuffix(".html");
         resolver.setTemplateMode(TemplateMode.HTML);
         return resolver;
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/resources/**").addResourceLocations("/WEB-INF/resources/");
     }
 }

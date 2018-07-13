@@ -10,11 +10,10 @@ import project.Service.UserService;
 
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/")
 public class HomeController {
 
-    @Autowired
-    private ProductService productService;
+
 
 
 //    @GetMapping()
@@ -24,13 +23,10 @@ public class HomeController {
 //        return "home";
 //    }
 
-    @Autowired
-    private UserService userService;
+
 
     @GetMapping()
-    public String index(Model model) {
-        this.userService.add("Gosho", "Petrov", "peshetu", "123456", "Plovdiv");
-        model.addAttribute("user", this.userService.get("peshetu").getUsername());
+    public String index() {
         return "home";
     }
 }

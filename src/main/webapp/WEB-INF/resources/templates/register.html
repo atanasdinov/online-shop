@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Register</title>
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link th:href = "@{/resources/static/css/signup.css}" rel="stylesheet" type="text/css"/>-->
+</head>
+<body class="text-center">
+<form class="form-signup" method="post">
+    <h1 class="h3 mb-3 font-weight-normal">Sign up for ScaleShop!</h1>
+
+    <label for="inputFirstName" class="sr-only">First name</label>
+    <input type="text" id="inputFirstName" class="form-control" placeholder="FirstName" required autofocus>
+
+    <label for="inputLastName" class="sr-only">Last name</label>
+    <input type="text" id="inputLastName" class="form-control" placeholder="LastName" required>
+
+    <p></p>
+
+    <label for="inputEmail" class="sr-only">Email</label>
+    <input type="email" id="inputEmail" class="form-control" placeholder="Email" required>
+
+    <p></p>
+
+    <label for="inputUsername" class="sr-only">Username</label>
+    <input type="text" id="inputUsername" class="form-control" placeholder="Username" required>
+
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+</form>
+</body>
+</html>
