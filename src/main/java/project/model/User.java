@@ -1,34 +1,58 @@
 package project.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
 
-    private String fullName;
-    private String userName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    private long id;
+    private String firstName;
+    private String lastName;
+    private String username;
     private String password;
     private String address;
-    private boolean isAdmin = false;
 
-    public User(String fullName, String userName, String password, String address) {
-        this.fullName = fullName;
-        this.userName = userName;
+    public User() {
+    }
+
+    public User(String firstName, String lastName, String username, String password, String address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
         this.password = password;
         this.address = address;
     }
 
-    public String getFullName() {
-        return fullName;
+    public long getId() {
+        return id;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getUserName() {
-        return userName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -45,13 +69,5 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
     }
 }
