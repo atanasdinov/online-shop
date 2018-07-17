@@ -35,7 +35,6 @@ import java.util.Properties;
 @ComponentScan(basePackages = "project")
 @PropertySource("/WEB-INF/resources/application.properties")
 @EnableJpaRepositories(basePackages = { "project/repositories" })
-
 public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
 
     private ApplicationContext applicationContext;

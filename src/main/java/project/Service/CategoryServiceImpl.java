@@ -6,7 +6,6 @@ import project.model.DTOS.CategoryDTO;
 import project.model.entities.Category;
 import project.repositories.CategoryRepository;
 import project.utils.ModelParser;
-import project.utils.ModelParserImpl;
 
 import java.util.ArrayList;
 import java.util.List;

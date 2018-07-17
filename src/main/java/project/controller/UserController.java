@@ -37,7 +37,3 @@ public class UserController {
         return "home";
     }
 }
-//    public String index(Model model){
-//    this.userService.add("Gosho", "Petrov", "peshetu", "123456", "Plovdiv");
-//        model.addAttribute("user", this.userService.get("peshetu").getUsername());
-//}
