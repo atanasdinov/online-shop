@@ -40,4 +40,10 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     public List<Category> all() {
         return (List<Category>) em.createNativeQuery("select * from categories",Category.class).getResultList();
     }
+
+    @Override
+    public boolean doExist(String categoryName) {
+        List resultList = em.createNativeQuery("select * from categories", Category.class).getResultList();
+        return resultList.size() != 0;
+    }
 }

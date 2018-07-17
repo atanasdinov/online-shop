@@ -41,7 +41,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
         return (Product) em
                 .createNativeQuery("select * from products where name=:name", Product.class)
-                .setParameter("name",name);
+                .setParameter("name",name).getSingleResult();
 
     }
 

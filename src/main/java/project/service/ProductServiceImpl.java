@@ -3,7 +3,6 @@ package project.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import project.model.DTOS.CategoryDTO;
 import project.model.DTOS.ProductDTO;
 import project.model.entities.Category;
 import project.model.entities.Product;
@@ -32,7 +31,9 @@ public class ProductServiceImpl implements ProductService {
         if(categoryName==null) {
             throw new NullPointerException("category name must not be null");
         }
-
+        if(!categoryRepository.doExist(categoryName)) {
+            this.categoryRepository.persist(new Category(categoryName));
+        }
         Category category = this.modelMapper.map(categoryRepository.get(categoryName), Category.class);
         Product product = new Product(category,productDTO.getPrice(), productDTO.getName(), productDTO.getQuantity());
         this.productRepository.persist(product);
