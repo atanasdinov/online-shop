@@ -5,7 +5,26 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<p>gosho</p>
-<p th:text="${product}"></p>
+    <th:block th:each="category : ${categories}" th:object="${category}">
+        <p th:text="*{name}"></p><br/>
+    </th:block>
+    <hr/>
+    <th:block th:each="product : ${products}" th:object="${product}">
+        <p th:text="*{name}"></p>
+        <p th:text="*{price}"></p>
+        <p th:text="*{quantity}"></p>
+        <p th:text="*{rating}"></p>
+        <br/>
+    </th:block>
+    <hr/>
+    <p th:text="Hard Coded Category : ${categoryName}"></p>
+    <hr/>
+    <th:block th:each="product : ${productsByCategory}" th:object="${product}">
+        <p th:text="*{name}"></p>
+        <p th:text="*{price}"></p>
+        <p th:text="*{quantity}"></p>
+        <p th:text="*{rating}"></p>
+    </th:block>
+
 </body>
 </html>

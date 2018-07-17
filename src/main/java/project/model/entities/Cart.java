@@ -1,6 +1,7 @@
-package project.model;
+package project.model.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +16,7 @@ public class Cart {
     private Integer totalPrice;
 
     public Cart() {
+        this.products = new ArrayList<>();
     }
 
     public Cart(List<Product> products, Integer shipmentPrice, Integer totalPrice) {

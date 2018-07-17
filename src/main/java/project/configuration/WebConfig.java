@@ -73,6 +73,7 @@ public class WebConfig implements ApplicationContextAware {
     public LocalContainerEntityManagerFactoryBean geEntityManagerFactoryBean() throws PropertyVetoException {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto","update");
+        properties.setProperty("hibernate.show_sql","true");
 
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource());

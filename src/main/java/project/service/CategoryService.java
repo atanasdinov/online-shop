@@ -1,7 +1,12 @@
 package project.service;
 
-import org.springframework.stereotype.Service;
+import project.model.DTOS.CategoryDTO;
+import project.model.entities.Category;
 
-@Service
+import java.util.List;
+
 public interface CategoryService {
+    void create(CategoryDTO category);
+    CategoryDTO get(String name);
+    List<CategoryDTO> all();
 }
