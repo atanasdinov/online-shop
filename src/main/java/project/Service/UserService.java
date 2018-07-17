@@ -1,10 +1,10 @@
 package project.Service;
 
-import project.model.entities.User;
+import project.model.DTOS.UserDTO;
 
 
 public interface UserService {
-    void add(String firstName, String lastName, String username, String password, String address);
-    User get(String username);
+    void register(UserDTO userDTO);
+    UserDTO get(String username);
 
 }

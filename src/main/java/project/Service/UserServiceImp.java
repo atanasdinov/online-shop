@@ -2,26 +2,33 @@ package project.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.model.DTOS.UserDTO;
 import project.model.entities.User;
 import project.repositories.UserRepository;
+import project.utils.ModelParser;
 
 @Service
 public class UserServiceImp implements UserService {
 
     private UserRepository userRepository;
+    private ModelParser modelParser;
 
     @Autowired
-    public UserServiceImp(UserRepository userRepository) {
+    public UserServiceImp(UserRepository userRepository, ModelParser modelParser) {
         this.userRepository = userRepository;
+        this.modelParser = modelParser;
     }
 
     @Override
-    public void add(String firstName, String lastName, String username, String password, String address) {
-        this.userRepository.add(new User (firstName, lastName, username, password, address));
+    public void register(UserDTO userDTO) {
+        User user = modelParser.convert(userDTO, User.class);
+        this.userRepository.add(user);
+
     }
 
     @Override
-    public User get(String username) {
-        return userRepository.get(username);
+    public UserDTO get(String username) {
+        User user = userRepository.get(username);
+        return modelParser.convert(user, UserDTO.class);
     }
 }

@@ -1,15 +1,7 @@
-package project.model.entities;
+package project.model.DTOS;
 
-import javax.persistence.*;
+public class UserDTO {
 
-@Entity
-@Table(name = "users")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -17,20 +9,7 @@ public class User {
     private String password;
     private String address;
 
-    public User() {
-    }
-
-    public User(String firstName, String lastName, String email, String username, String password, String address) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.address = address;
-    }
-
-    public long getId() {
-        return id;
+    public UserDTO() {
     }
 
     public String getFirstName() {
@@ -47,6 +26,14 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {
@@ -67,14 +54,6 @@ public class User {
 
     public String getAddress() {
         return address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void setAddress(String address) {
