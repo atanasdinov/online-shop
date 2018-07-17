@@ -1,6 +1,6 @@
 package project.repositories;
 
-import project.model.User;
+import project.model.entities.User;
 
 import java.util.List;
 

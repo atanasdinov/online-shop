@@ -1,6 +1,6 @@
 package project.Service;
 
-import project.model.User;
+import project.model.entities.User;
 
 
 public interface UserService {

@@ -2,7 +2,7 @@ package project.repositories;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import project.model.User;
+import project.model.entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

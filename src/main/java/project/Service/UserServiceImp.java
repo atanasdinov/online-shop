@@ -2,7 +2,7 @@ package project.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import project.model.User;
+import project.model.entities.User;
 import project.repositories.UserRepository;
 
 @Service

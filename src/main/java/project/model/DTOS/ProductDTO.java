@@ -1,34 +1,20 @@
-package project.model;
+package project.model.DTOS;
 
-import javax.persistence.*;
-import java.util.List;
-
-@Entity
-@Table(name = "products")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class ProductDTO {
     private Double price;
     private byte[] picture;
-    @ManyToOne(targetEntity = Category.class)
-    private Category category;
     private String name;
     private String rating;
     private Integer quantity;
-    @ManyToOne(targetEntity = Cart.class)
-    private Cart cart;
 
-    public Product() {
+    public ProductDTO() {
     }
 
-    public Product(Double price, String name) {
+    public ProductDTO(Double price, String name, String rating, Integer quantity) {
         this.price = price;
         this.name = name;
-    }
-
-    public long getId() {
-        return id;
+        this.rating = rating;
+        this.quantity = quantity;
     }
 
     public Double getPrice() {
@@ -45,14 +31,6 @@ public class Product {
 
     public void setPicture(byte[] picture) {
         this.picture = picture;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
     }
 
     public String getName() {
@@ -77,13 +55,5 @@ public class Product {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
     }
 }

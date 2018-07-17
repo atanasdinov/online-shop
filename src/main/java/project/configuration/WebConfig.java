@@ -34,7 +34,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScan(basePackages = "project")
 @PropertySource("/WEB-INF/resources/application.properties")
-@EnableJpaRepositories(basePackages = { "com.scalefocus.repository" })
+@EnableJpaRepositories(basePackages = { "project/repositories" })
 
 public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
 
@@ -75,6 +75,7 @@ public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
     public LocalContainerEntityManagerFactoryBean geEntityManagerFactoryBean() throws PropertyVetoException {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.show_sql","true");
 
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource());

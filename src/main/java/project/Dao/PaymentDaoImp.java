@@ -1,7 +1,7 @@
 package project.Dao;
 
 import org.springframework.stereotype.Repository;
-import project.model.Payment;
+import project.model.entities.Payment;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

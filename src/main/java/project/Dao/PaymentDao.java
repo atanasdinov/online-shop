@@ -1,6 +1,6 @@
 package project.Dao;
 
-import project.model.Payment;
+import project.model.entities.Payment;
 
 import java.util.List;
 

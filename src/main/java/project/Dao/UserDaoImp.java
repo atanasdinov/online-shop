@@ -1,7 +1,7 @@
 package project.Dao;
 
 import org.springframework.stereotype.Repository;
-import project.model.User;
+import project.model.entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
