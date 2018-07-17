@@ -15,16 +15,7 @@ public class ModelParserImpl implements ModelParser {
 
     @Override
     public <S, D> D convert(S source, Class<D> destinationClass) {
-        D convertedObject = null;
-        convertedObject = this.modelMapper.map(source, destinationClass);
-        return convertedObject;
+        return this.modelMapper.map(source, destinationClass);
     }
 
-    @Override
-    public <S, D> D convert(S source, Class<D> destinationClass, PropertyMap<S, D> propertyMap) {
-        D convertedObject = null;
-        this.modelMapper.addMappings(propertyMap);
-        convertedObject = this.modelMapper.map(source, destinationClass);
-        return convertedObject;
-    }
 }

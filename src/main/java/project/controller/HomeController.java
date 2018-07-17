@@ -24,11 +24,11 @@ public class HomeController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping()
+    @GetMapping({"", "/home"})
     public String index(Model model){
-        categoryService.create(new CategoryDTO("Test Category"));
-        productService.add( new ProductDTO(234.0,"Item","5.5",5),"Test Category");
-        model.addAttribute("product",this.productService.get("Item").getName());
+        categoryService.create(new CategoryDTO("aaa"));
+        productService.add( new ProductDTO(234.0,"asfdsf","5.5",5),"aaa");
+        model.addAttribute("product",this.productService.get("asfdsf").getName());
         return "home";
     }
 
