@@ -1,6 +1,5 @@
 package project.service;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.model.DTOS.ProductDTO;
@@ -8,6 +7,7 @@ import project.model.entities.Category;
 import project.model.entities.Product;
 import project.repositories.CategoryRepository;
 import project.repositories.ProductRepository;
+import project.utils.ModelParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +17,13 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
-    private ModelMapper modelMapper;
+    private ModelParser modelParser;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, ModelParser modelParser) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.modelMapper = new ModelMapper();
+        this.modelParser = modelParser;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
         if(!categoryRepository.doExist(categoryName)) {
             this.categoryRepository.persist(new Category(categoryName));
         }
-        Category category = this.modelMapper.map(categoryRepository.get(categoryName), Category.class);
+        Category category = this.modelParser.convert(categoryRepository.get(categoryName), Category.class);
         Product product = new Product(category,productDTO.getPrice(), productDTO.getName(), productDTO.getQuantity());
         this.productRepository.persist(product);
     }
@@ -45,14 +45,14 @@ public class ProductServiceImpl implements ProductService {
             throw new NullPointerException("product name must not be null");
         }
         Product product = this.productRepository.get(name);
-        return modelMapper.map(product,ProductDTO.class);
+        return modelParser.convert(product,ProductDTO.class);
     }
 
     @Override
     public List<ProductDTO> all() {
         List<ProductDTO> productDTOS = new ArrayList<>();
         for (Product product : this.productRepository.all()) {
-            productDTOS.add(this.modelMapper.map(product,ProductDTO.class));
+            productDTOS.add(this.modelParser.convert(product,ProductDTO.class));
         }
         return productDTOS;
     }
@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = this.productRepository.allByCategory(categoryName);
         List<ProductDTO> productDTOS = new ArrayList<>();
         for (Product product : products) {
-            productDTOS.add(this.modelMapper.map(product,ProductDTO.class));
+            productDTOS.add(this.modelParser.convert(product,ProductDTO.class));
         }
         return productDTOS;
     }

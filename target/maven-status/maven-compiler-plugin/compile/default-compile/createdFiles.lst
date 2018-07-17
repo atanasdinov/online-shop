@@ -12,7 +12,6 @@ project\model\entities\User.class
 project\model\entities\Product.class
 project\repositories\CategoryRepository.class
 project\utils\ModelParser.class
-project\controller\TestController.class
 project\model\DTOS\ProductDTO.class
 project\model\entities\Cart.class
 project\service\ProductServiceImpl.class
