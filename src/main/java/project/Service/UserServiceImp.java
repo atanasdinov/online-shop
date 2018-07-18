@@ -2,7 +2,8 @@ package project.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import project.model.DTOS.UserDTO;
+import project.model.DTOS.UserLoginDTO;
+import project.model.DTOS.UserRegisterDTO;
 import project.model.entities.User;
 import project.repositories.UserRepository;
 import project.utils.ModelParser;
@@ -20,15 +21,22 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void register(UserDTO userDTO) {
-        User user = modelParser.convert(userDTO, User.class);
+    public void register(UserRegisterDTO userRegisterDTO) {
+        User user = modelParser.convert(userRegisterDTO, User.class);
         this.userRepository.add(user);
-
     }
 
     @Override
-    public UserDTO get(String username) {
-        User user = userRepository.get(username);
-        return modelParser.convert(user, UserDTO.class);
+    public UserLoginDTO login(UserLoginDTO userLoginDTO) {
+        User existingUser;
+        UserLoginDTO loginDTO;
+        try {
+            existingUser = userRepository.getExistingUser(userLoginDTO.getUsername(), userLoginDTO.getPassword());
+            loginDTO = this.modelParser.convert(existingUser, UserLoginDTO.class);
+        } catch (NullPointerException e) {
+            return null;
+        }
+        return loginDTO;
     }
+
 }

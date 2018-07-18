@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Scaleshop Home</title>
+    <link href= "https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/resources/static/css/cover.css}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/popper.min.js"></script>
+    <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body class="text-center">
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+        <div class="inner">
+            <h3 class="masthead-brand">ScaleShop</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link active" th:href="@{/home}">Home</a>
+                <a class="nav-link" href="#">Browse</a>
+                <a class="nav-link" href="#">Contact</a>
+                <a class="nav-link" ></a>
+                <a class="nav-link" ></a>
+                <a class="nav-link" th:href="@{/user/register}">Sign up</a>
+                <a class="nav-link" th:href="@{/user/login}">Sign in</a>
+            </nav>
+        </div>
+    </header>
+
+    <main role="main" class="inner cover">
+        <h1 class="cover-heading">Welcome to ScaleShop.</h1>
+        <p class="lead">ScaleShop is the place where you can find everything you need.</p>
+        <p class="lead">
+            <a href="#" class="btn btn-lg btn-secondary">Learn more</a>
+        </p>
+    </main>
+
+    <footer class="mastfoot mt-auto">
+        <div class="inner">
+            <p><a href="https://www.scalefocus.com/">Scalefocus</a></p>
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>
