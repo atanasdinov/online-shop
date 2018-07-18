@@ -38,6 +38,16 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     @Transactional
     public List<Category> all() {
-        return (List<Category>) em.createNativeQuery("select * from categories",Category.class).getResultList();
+        return (List<Category>) em
+                .createNativeQuery("select * from categories",Category.class)
+                .getResultList();
+    }
+
+    @Override
+    public boolean doExist(String categoryName) {
+        List resultList = em.createNativeQuery("select * from categories as c where c.name=:name", Category.class)
+                .setParameter("name",categoryName)
+                .getResultList();
+        return resultList.size() != 0;
     }
 }

@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
+
     @PersistenceContext
     @Autowired
     private EntityManager em;
@@ -27,12 +28,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Transactional
     public void persist(Product product) {
         em.createNativeQuery("insert into products (name,price,quantity,rating,category_id) values (:name,:price,:quantity,:rating,:categoryId)")
-                .setParameter("name",product.getName())
-                .setParameter("price",product.getPrice())
-                .setParameter("quantity",product.getQuantity())
-                .setParameter("rating",product.getRating())
-                .setParameter("categoryId",product.getCategory().getId()).executeUpdate();
-
+            .setParameter("name",product.getName())
+            .setParameter("price",product.getPrice())
+            .setParameter("quantity",product.getQuantity())
+            .setParameter("rating",product.getRating())
+            .setParameter("categoryId",product.getCategory().getId()).executeUpdate();
     }
 
     @Override
