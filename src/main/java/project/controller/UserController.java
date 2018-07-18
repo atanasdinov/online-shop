@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import project.Service.ProductService;
 import project.Service.UserService;
-import project.model.DTOS.UserDTO;
+import project.model.DTOS.UserLoginDTO;
+import project.model.DTOS.UserRegisterDTO;
 
 @Controller
 @RequestMapping("/user")
@@ -20,23 +20,26 @@ public class UserController {
 
     @GetMapping("/register")
     public String registerForm(Model model) {
-        model.addAttribute("user", new UserDTO());
+        model.addAttribute("user", new UserRegisterDTO());
         return "register";
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute UserDTO user) {
+    public String register(@ModelAttribute UserRegisterDTO user) {
         userService.register(user);
         return "redirect:/user/login";
     }
 
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(Model model) {
+        model.addAttribute("user", new UserLoginDTO());
         return "login";
     }
 
     @PostMapping("/login")
-    public String login() {
+    public String login(@ModelAttribute UserLoginDTO user) {
+        userService.login(user);
         return "home";
     }
+
 }

@@ -1,14 +1,15 @@
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\model\entities\Cart.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\repositories\ProductRepository.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\controller\HomeController.java
+C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\model\DTOS\UserRegisterDTO.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\model\entities\Product.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\Service\CategoryServiceImpl.java
-C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\model\DTOS\UserDTO.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\Service\UserService.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\repositories\CategoryRepositoryImpl.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\repositories\UserRepository.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\model\entities\Payment.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\Service\UserServiceImp.java
+C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\model\DTOS\UserLoginDTO.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\utils\ModelParserImpl.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\repositories\UserRepositoryImpl.java
 C:\Users\atanas.dinov\IdeaProjects\online-shop\src\main\java\project\controller\UserController.java

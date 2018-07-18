@@ -1,6 +1,8 @@
 project\repositories\ProductRepository.class
+project\model\DTOS\UserRegisterDTO.class
 project\repositories\ProductRepositoryImpl.class
 project\model\entities\Payment.class
+project\model\DTOS\UserLoginDTO.class
 project\repositories\CategoryRepositoryImpl.class
 project\model\entities\User.class
 project\model\entities\Product.class
@@ -20,7 +22,6 @@ project\Service\CategoryServiceImpl.class
 project\repositories\CategoryRepository.class
 project\repositories\UserRepository.class
 project\utils\ModelParser.class
-project\model\DTOS\UserDTO.class
 project\model\entities\Cart.class
 project\configuration\WebConfig.class
 project\utils\ModelParserImpl.class

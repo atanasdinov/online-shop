@@ -1,6 +1,6 @@
 package project.model.DTOS;
 
-public class UserDTO {
+public class UserRegisterDTO {
 
     private String firstName;
     private String lastName;
@@ -9,7 +9,7 @@ public class UserDTO {
     private String password;
     private String address;
 
-    public UserDTO() {
+    public UserRegisterDTO() {
     }
 
     public String getFirstName() {
