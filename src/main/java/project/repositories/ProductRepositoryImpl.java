@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
+
     @PersistenceContext
     @Autowired
     private EntityManager em;
@@ -32,7 +33,6 @@ public class ProductRepositoryImpl implements ProductRepository {
             .setParameter("quantity",product.getQuantity())
             .setParameter("rating",product.getRating())
             .setParameter("categoryId",product.getCategory().getId()).executeUpdate();
-
     }
 
     @Override

@@ -20,7 +20,8 @@ public class Product {
     private String name;
     private String rating;
     private Integer quantity;
-    @ManyToOne(targetEntity = Cart.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Cart.class, cascade = CascadeType.PERSIST)
+    @JoinColumn(name="cart_id")
     private Cart cart;
 
     public Product() {
