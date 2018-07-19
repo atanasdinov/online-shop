@@ -21,14 +21,17 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional
     public void add(User user) {
-        em.persist(user);
+        em.merge(user);
     }
 
 
     @Override
     @Transactional
     public List<User> all() {
-        return (List<User>) em.createQuery("select u from User u");
+        TypedQuery<User> typedQuery = em
+                .createQuery("select u from User u", User.class);
+
+        return typedQuery.getResultList();
     }
 
     @Override
@@ -41,5 +44,13 @@ public class UserRepositoryImpl implements UserRepository {
         return typedQuery.getSingleResult();
     }
 
+    @Override
+    public User getUserByUsername(String username) {
+        TypedQuery<User> typedQuery = em
+                .createQuery("SELECT u FROM User u where u.username=:username", User.class)
+                .setParameter("username", username);
+
+        return typedQuery.getSingleResult();
+    }
 
 }

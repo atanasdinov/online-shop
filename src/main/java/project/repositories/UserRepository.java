@@ -8,4 +8,5 @@ public interface UserRepository {
     void add(User user);
     List<User> all();
     User getExistingUser(String username, String password);
+    User getUserByUsername(String username);
 }
