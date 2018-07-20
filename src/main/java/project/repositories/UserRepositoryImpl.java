@@ -3,6 +3,7 @@ package project.repositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import project.model.DTOS.UserLoginDTO;
+import project.model.entities.Role;
 import project.model.entities.User;
 
 import javax.persistence.EntityManager;
@@ -20,37 +21,45 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     @Transactional
-    public void add(User user) {
-        em.merge(user);
+    public void add(User user, Role role) {
+                em
+                    .createNativeQuery("INSERT INTO users (address, email, firstName, lastName, password, username, role_id) " +
+                            "VALUES (:address, :email, :firstName, :lastName, :password, :username, :role_id)", User.class)
+                    .setParameter("address", user.getAddress())
+                    .setParameter("email", user.getEmail())
+                    .setParameter("firstName", user.getFirstName())
+                    .setParameter("lastName", user.getLastName())
+                    .setParameter("password", user.getPassword())
+                    .setParameter("username", user.getUsername())
+                    .setParameter("role_id", user.getRole().getId())
+                    .executeUpdate();
     }
 
 
     @Override
     @Transactional
     public List<User> all() {
-        TypedQuery<User> typedQuery = em
-                .createQuery("select u from User u", User.class);
+               return (List<User>) em
+                    .createNativeQuery("select * from users", User.class)
+                    .getResultList();
 
-        return typedQuery.getResultList();
     }
 
     @Override
     public User getExistingUser(String username, String password) {
-        TypedQuery<User> typedQuery = em
-                .createQuery("SELECT u FROM User u where u.username=:username AND u.password=:password", User.class)
-                .setParameter("username", username)
-                .setParameter("password", password);
-
-        return typedQuery.getSingleResult();
+              return (User) em
+                    .createNativeQuery("SELECT * FROM users where username=:username AND password=:password", User.class)
+                    .setParameter("username", username)
+                    .setParameter("password", password)
+                    .getSingleResult();
     }
 
     @Override
     public User getUserByUsername(String username) {
-        TypedQuery<User> typedQuery = em
-                .createQuery("SELECT u FROM User u where u.username=:username", User.class)
-                .setParameter("username", username);
-
-        return typedQuery.getSingleResult();
+                return (User) em
+                .createNativeQuery("SELECT * FROM users where username=:username", User.class)
+                .setParameter("username", username)
+                .getSingleResult();
     }
 
 }

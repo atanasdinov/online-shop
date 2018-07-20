@@ -52,7 +52,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         role.getUsers().add(user);
         user.setRole(role);
 
-        this.userRepository.add(user);
+        this.userRepository.add(user, role);
     }
 
     @Override
