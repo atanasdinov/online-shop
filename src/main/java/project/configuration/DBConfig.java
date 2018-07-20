@@ -13,30 +13,20 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.spring4.view.ThymeleafViewResolver;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ITemplateResolver;
 
-import javax.annotation.Resource;
 import java.beans.PropertyVetoException;
 import java.util.Properties;
 
-@Configuration
-@EnableWebMvc
-@EnableTransactionManagement
-@ComponentScan(basePackages = "project")
-@PropertySource("/WEB-INF/resources/application.properties")
-@EnableJpaRepositories(basePackages = { "project/repositories" })
 
-public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
+
+@Configuration
+@EnableTransactionManagement
+@ComponentScan
+@EnableJpaRepositories(basePackages = { "project/repositories" })
+@PropertySource(value={"classpath:application.properties"})
+public class DBConfig implements ApplicationContextAware, WebMvcConfigurer {
 
     private ApplicationContext applicationContext;
 
@@ -62,7 +52,6 @@ public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
     @Bean
     public MysqlDataSource dataSource() throws IllegalStateException, PropertyVetoException {
         MysqlDataSource dataSource = new MysqlDataSource();
-    //Connection and driver settings
 //        dataSource.setDatabaseName(env.getProperty(dbName));
         dataSource.setUser(env.getProperty(Username));
         dataSource.setPassword(env.getProperty(Password));
@@ -92,33 +81,5 @@ public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
         return transactionManager;
     }
 
-    @Bean
-    public ViewResolver viewResolver() {
-        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
-        resolver.setTemplateEngine(templateEngine());
-        resolver.setCharacterEncoding("UTF-8");
-        return resolver;
-    }
 
-    @Bean
-    public TemplateEngine templateEngine() {
-        SpringTemplateEngine engine = new SpringTemplateEngine();
-        engine.setEnableSpringELCompiler(true);
-        engine.setTemplateResolver(templateResolver());
-        return engine;
-    }
-
-    private ITemplateResolver templateResolver() {
-        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-        resolver.setApplicationContext(applicationContext);
-        resolver.setPrefix("/WEB-INF/resources/templates/");
-        resolver.setSuffix(".html");
-        resolver.setTemplateMode(TemplateMode.HTML);
-        return resolver;
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/WEB-INF/resources/");
-    }
 }

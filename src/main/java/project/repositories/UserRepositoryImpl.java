@@ -31,8 +31,7 @@ public class UserRepositoryImpl implements UserRepository {
                     .setParameter("lastName", user.getLastName())
                     .setParameter("password", user.getPassword())
                     .setParameter("username", user.getUsername())
-                    .setParameter("role_id", user.getRole().getId())
-                    .executeUpdate();
+                    .setParameter("role_id", user.getRole().getId());
     }
 
 

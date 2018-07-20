@@ -7,18 +7,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import project.model.DTOS.ProductDTO;
 import project.model.DTOS.UserLoginDTO;
 import project.model.DTOS.UserRegisterDTO;
-import project.model.entities.Product;
 import project.model.entities.Role;
 import project.model.entities.User;
 import project.repositories.UserRepository;
 import project.utils.ModelParser;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -42,9 +38,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
         User user = new User(userRegisterDTO.getFirstName(), userRegisterDTO.getLastName(), userRegisterDTO.getEmail(),
                 userRegisterDTO.getUsername(), userRegisterDTO.getPassword(), userRegisterDTO.getAddress());
 
-        for (User user1 : this.userRepository.all()) {
-            String debug="";
-        }
         if (this.userRepository.all().isEmpty()) {
             this.roleService.insert(new Role("ADMIN"));
             this.roleService.insert(new Role("USER"));
