@@ -17,7 +17,7 @@ public class User {
     private String password;
     private String address;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToOne(targetEntity = Role.class, fetch = FetchType.LAZY, cascade=CascadeType.PERSIST)
     private Role role;
 
     public User() {

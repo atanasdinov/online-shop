@@ -14,7 +14,7 @@ public class Role {
 
     private String name;
 
-    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
     private Set<User> users;
 
     public Role(String name) {

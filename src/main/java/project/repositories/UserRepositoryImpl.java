@@ -37,11 +37,11 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
-    @Transactional
     public List<User> all() {
-               return (List<User>) em
-                    .createNativeQuery("select * from users", User.class)
-                    .getResultList();
+              TypedQuery<User> typedQuery = (TypedQuery<User>) em
+                    .createQuery("select u from User u", User.class);
+
+              return typedQuery.getResultList();
 
     }
 
