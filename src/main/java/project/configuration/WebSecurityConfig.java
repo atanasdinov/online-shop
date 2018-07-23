@@ -15,8 +15,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/**").permitAll();
-//                .and()
+                    .antMatchers("/**").permitAll()
+                    .and()
+                .formLogin()
+                    .loginPage("/user/login")
+                    .loginProcessingUrl("/user/login")
+                    .failureUrl("/user/login?error")
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .permitAll();
 //        .userDetailsService(this.userDetailsService);
     }
 

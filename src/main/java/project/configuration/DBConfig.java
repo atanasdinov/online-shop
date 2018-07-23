@@ -73,13 +73,13 @@ public class DBConfig implements ApplicationContextAware, WebMvcConfigurer {
         factoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         return factoryBean;
     }
-
-    @Bean
-    public JpaTransactionManager geJpaTransactionManager() throws PropertyVetoException {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(geEntityManagerFactoryBean().getObject());
-        return transactionManager;
-    }
+//
+//    @Bean
+//    public JpaTransactionManager geJpaTransactionManager() throws PropertyVetoException {
+//        JpaTransactionManager transactionManager = new JpaTransactionManager();
+//        transactionManager.setEntityManagerFactory(geEntityManagerFactoryBean().getObject());
+//        return transactionManager;
+//    }
 
 
 }
