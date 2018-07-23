@@ -1,12 +1,12 @@
-package project.Service;
+package project.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.model.DTOS.CategoryDTO;
 import project.model.entities.Category;
 import project.repositories.CategoryRepository;
+import project.service.CategoryService;
 import project.utils.ModelParser;
-import project.utils.ModelParserImpl;
 
 import java.util.ArrayList;
 import java.util.List;

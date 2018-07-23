@@ -1,10 +1,13 @@
-package project.Service;
+package project.serviceImpl;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.model.DTOS.UserDTO;
 import project.model.entities.User;
 import project.repositories.UserRepository;
+import project.service.RoleService;
+import project.service.UserService;
 import project.utils.ModelParser;
 
 @Service

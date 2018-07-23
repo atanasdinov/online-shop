@@ -1,4 +1,4 @@
-package project.Service;
+package project.serviceImpl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,7 @@ import project.model.entities.Category;
 import project.model.entities.Product;
 import project.repositories.CategoryRepository;
 import project.repositories.ProductRepository;
+import project.service.ProductService;
 
 import java.util.ArrayList;
 import java.util.List;
