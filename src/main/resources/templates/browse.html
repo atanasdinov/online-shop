@@ -6,26 +6,9 @@
     <title>Browse</title>
     <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/browse.css}" rel="stylesheet">
-    <!--<link th:href="@{/css/cover.css}" rel="stylesheet">-->
 </head>
 
 <body>
-<!--<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">-->
-<!--<header class="masthead mb-auto">-->
-    <!--<div class="inner">-->
-        <!--<h3 class="masthead-brand">ScaleShop</h3>-->
-        <!--<nav class="nav nav-masthead justify-content-center">-->
-            <!--<a class="nav-link active" th:href="@{/home}">Home</a>-->
-            <!--<a class="nav-link" th:href="@{/products/browse}">Browse</a>-->
-            <!--<a class="nav-link" href="#">Contact</a>-->
-            <!--<a class="nav-link" ></a>-->
-            <!--<a class="nav-link" ></a>-->
-            <!--<a class="nav-link" th:href="@{/user/register}">Sign up</a>-->
-            <!--<a class="nav-link" th:href="@{/user/login}">Sign in</a>-->
-        <!--</nav>-->
-    <!--</div>-->
-<!--</header>-->
-
     <header>
         <div class="collapse bg-dark" id="navbarHeader">
             <div class="container" align="center">
@@ -207,12 +190,11 @@
 <footer class="text-muted">
     <div class="container">
         <p class="float-right">
-            <a href="#">Back to top</a>
+            <a th:href="@{/home}">Back to Home</a>
         </p>
         <p>ScaleShop</p>
     </div>
 </footer>
-<!--</div>-->
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
