@@ -20,7 +20,6 @@ import java.beans.PropertyVetoException;
 import java.util.Properties;
 
 
-
 @Configuration
 @EnableTransactionManagement
 @ComponentScan
@@ -80,6 +79,5 @@ public class DBConfig implements ApplicationContextAware, WebMvcConfigurer {
         transactionManager.setEntityManagerFactory(geEntityManagerFactoryBean().getObject());
         return transactionManager;
     }
-
 
 }

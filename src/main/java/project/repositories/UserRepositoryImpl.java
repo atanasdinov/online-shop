@@ -1,6 +1,7 @@
 package project.repositories;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import project.model.DTOS.UserLoginDTO;
 import project.model.entities.Role;
@@ -18,6 +19,9 @@ public class UserRepositoryImpl implements UserRepository {
     @PersistenceContext
     @Autowired
     private EntityManager em;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -46,11 +50,17 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getExistingUser(String username, String password) {
-              return (User) em
-                    .createNativeQuery("SELECT * FROM users where username=:username AND password=:password", User.class)
-                    .setParameter("username", username)
-                    .setParameter("password", password)
-                    .getSingleResult();
+                User user = (User) em
+//                        .createNativeQuery("SELECT * FROM users where username=:username AND password=:password", User.class)
+                        .createNativeQuery("SELECT * FROM users where username=:username", User.class)
+                        .setParameter("username", username)
+//                        .setParameter("password", password)
+                        .getSingleResult();
+
+                if (passwordEncoder.matches(password, user.getPassword()))
+                    return user;
+                else
+                    return null;
     }
 
     @Override

@@ -10,11 +10,17 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
+
 @Repository
 public class CartRepositoryImpl implements CartRepository {
+
     @PersistenceContext
-    @Autowired
     private EntityManager em;
+
+    @Autowired
+    public CartRepositoryImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     @Transactional
@@ -60,4 +66,5 @@ public class CartRepositoryImpl implements CartRepository {
         return em.createNativeQuery("select * from carts c where c.id=:cartId", Cart.class)
                 .setParameter("cartId",cartId).getResultList().size()!=0;
     }
+
 }

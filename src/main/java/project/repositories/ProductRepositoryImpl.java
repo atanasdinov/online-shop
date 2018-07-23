@@ -15,14 +15,12 @@ import java.util.List;
 public class ProductRepositoryImpl implements ProductRepository {
 
     @PersistenceContext
-    @Autowired
     private EntityManager em;
 
-//    @Autowired
-//    public ProductRepositoryImpl(EntityManager em) {
-//        this.em = em;
-//    }
-
+    @Autowired
+    public ProductRepositoryImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     @Transactional
@@ -42,7 +40,6 @@ public class ProductRepositoryImpl implements ProductRepository {
         return (Product) em
                 .createNativeQuery("select * from products where name=:name", Product.class)
                 .setParameter("name",name).getSingleResult();
-
     }
 
     @Override
@@ -57,4 +54,5 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .createNativeQuery("SELECT * FROM products as p left join categories as c on p.category_id=c.id where c.name=:name", Product.class)
                 .setParameter("name",categoryName).getResultList();
     }
+    
 }

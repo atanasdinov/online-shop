@@ -7,6 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "carts")
 public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -14,6 +15,7 @@ public class Cart {
     private Double totalPrice;
     @OneToMany(mappedBy = "cart",cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     private List<Product> products;
+
     public Cart() {
         this.products = new ArrayList<>();
     }

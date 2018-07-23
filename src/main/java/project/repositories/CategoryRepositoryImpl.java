@@ -14,10 +14,14 @@ import java.util.List;
 
 @Repository
 public class CategoryRepositoryImpl implements CategoryRepository {
+
     @PersistenceContext
-    @Autowired
     private EntityManager em;
 
+    @Autowired
+    public CategoryRepositoryImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     @Transactional
@@ -31,8 +35,8 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         Category result = (Category) em
                 .createNativeQuery("select * from categories where name=:name", Category.class)
                 .setParameter("name", name).getSingleResult();
-        return result;
 
+        return result;
     }
 
     @Override
@@ -48,6 +52,8 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         List resultList = em.createNativeQuery("select * from categories as c where c.name=:name", Category.class)
                 .setParameter("name",categoryName)
                 .getResultList();
+
         return resultList.size() != 0;
     }
+
 }

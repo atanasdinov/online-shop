@@ -1,4 +1,4 @@
-package project.Service;
+package project.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.model.DTOS.UserLoginDTO;
 import project.model.DTOS.UserRegisterDTO;
@@ -23,25 +24,30 @@ public class UserServiceImp implements UserService, UserDetailsService {
     private UserRepository userRepository;
     private ModelParser modelParser;
     private RoleService roleService;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImp(UserRepository userRepository, ModelParser modelParser, RoleService roleService) {
+    public UserServiceImp(UserRepository userRepository, ModelParser modelParser, RoleService roleService, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.modelParser = modelParser;
         this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void register(UserRegisterDTO userRegisterDTO) {
         Role role;
 
-        User user = new User(userRegisterDTO.getFirstName(), userRegisterDTO.getLastName(), userRegisterDTO.getEmail(),
-                userRegisterDTO.getUsername(), userRegisterDTO.getPassword(), userRegisterDTO.getAddress());
+        User user = new User(userRegisterDTO.getFirstName(),
+                userRegisterDTO.getLastName(),
+                userRegisterDTO.getEmail(),
+                userRegisterDTO.getUsername(),
+                passwordEncoder.encode(userRegisterDTO.getPassword()), // Storing the encoded password
+                userRegisterDTO.getAddress());
 
         if (this.userRepository.all().isEmpty()) {
             this.roleService.insert(new Role("ADMIN"));
             this.roleService.insert(new Role("USER"));
-
             role = this.roleService.get("ADMIN");
         } else {
             role = this.roleService.get("USER");
@@ -57,8 +63,9 @@ public class UserServiceImp implements UserService, UserDetailsService {
     public UserLoginDTO login(UserLoginDTO userLoginDTO) {
         User existingUser;
         UserLoginDTO loginDTO;
+
         try {
-            existingUser = userRepository.getExistingUser(userLoginDTO.getUsername(), userLoginDTO.getPassword());
+            existingUser = userRepository.getExistingUser(userLoginDTO.getUsername(), userLoginDTO.getPassword());  // == null if wrong password / non-existing user
             loginDTO = this.modelParser.convert(existingUser, UserLoginDTO.class);
         } catch (NullPointerException e) {
             return null;
