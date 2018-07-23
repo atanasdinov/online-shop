@@ -1,6 +1,7 @@
 package project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
+    //@PreAuthorize(value = "hasAnyRole()")
     public String register(@ModelAttribute UserRegisterDTO userRegisterDTO) {
         userService.register(userRegisterDTO);
         return "redirect:/user/login";
