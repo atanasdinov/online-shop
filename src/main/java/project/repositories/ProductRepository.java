@@ -1,5 +1,6 @@
 package project.repositories;
 
+import project.model.entities.Category;
 import project.model.entities.Product;
 
 import java.util.List;

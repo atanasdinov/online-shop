@@ -1,4 +1,4 @@
-package project.Service;
+package project.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +7,7 @@ import project.repositories.RoleRepository;
 
 @Service
 public class RoleServiceImpl implements RoleService {
+
     private RoleRepository roleRepository;
 
     @Autowired
