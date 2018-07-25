@@ -1,11 +1,6 @@
-package project.service;
+package project.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.model.DTOS.UserLoginDTO;
@@ -15,11 +10,13 @@ import project.model.entities.User;
 import project.repositories.UserRepository;
 import project.utils.ModelParser;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.security.SecureRandom;
+
 
 @Service
-public class UserServiceImp implements UserService, UserDetailsService {
+public class UserServiceImp implements UserService {
 
     private UserRepository userRepository;
     private ModelParser modelParser;
@@ -60,34 +57,41 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserLoginDTO login(UserLoginDTO userLoginDTO) {
-        User existingUser;
-        UserLoginDTO loginDTO;
+    public boolean login(UserLoginDTO userLoginDTO,
+                         HttpServletResponse response) {
 
-        try {
-            existingUser = userRepository.getExistingUser(userLoginDTO.getUsername(), userLoginDTO.getPassword());  // == null if wrong password / non-existing user
-            loginDTO = this.modelParser.convert(existingUser, UserLoginDTO.class);
-        } catch (NullPointerException e) {
-            return null;
+        User user = userRepository.getExistingUser(userLoginDTO.getUsername(), userLoginDTO.getPassword());
+
+        final int COOKIE_EXPIRATION_30_MIN = 60 * 30;
+
+        if (user == null)
+            return false;
+        else {
+            Cookie cookie = new Cookie("token", this.addToken(user));
+            cookie.setPath("/");
+            cookie.setMaxAge(COOKIE_EXPIRATION_30_MIN);
+            response.addCookie(cookie);
+
+            return true;
         }
-        return loginDTO;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.userRepository.getUserByUsername(username);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        Set<GrantedAuthority> roles = new HashSet<>();
-        roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName()));
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                roles
-        );
-        return userDetails;
+    public User checkToken(String token) {
+        if (token == null)
+            return null;
+        return userRepository.checkToken(token);
     }
+
+    @Override
+    public String addToken(User user) {
+        SecureRandom random = new SecureRandom();
+        byte bytes[] = new byte[20];
+        random.nextBytes(bytes);
+        String token = bytes.toString();
+        user.setToken(token);
+        userRepository.setToken(token, user);
+        return token;
+    }
+
 }

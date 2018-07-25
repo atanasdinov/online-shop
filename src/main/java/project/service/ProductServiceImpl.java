@@ -1,4 +1,4 @@
-package project.service;
+package project.Service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

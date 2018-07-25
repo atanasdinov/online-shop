@@ -10,4 +10,6 @@ public interface UserRepository {
     List<User> all();
     User getExistingUser(String username, String password);
     User getUserByUsername(String username);
+    User checkToken(String token);
+    void setToken(String token, User user);
 }

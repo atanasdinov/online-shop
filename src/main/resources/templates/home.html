@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -10,7 +11,7 @@
 </head>
 
 <body class="text-center">
-<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column" >
     <header class="masthead mb-auto">
         <div class="inner">
             <h3 class="masthead-brand">ScaleShop</h3>
@@ -20,8 +21,19 @@
                 <a class="nav-link" href="#">Contact</a>
                 <a class="nav-link" ></a>
                 <a class="nav-link" ></a>
+                <th:block sec:authorize="isAnonymous()">
                 <a class="nav-link" th:href="@{/user/register}">Sign up</a>
                 <a class="nav-link" th:href="@{/user/login}">Sign in</a>
+                </th:block>
+                <th:block sec:authorize="hasRole('USER')">
+                    <p class="nav-link" th:text="${username}"></p>
+                    <a class="nav-link" th:href="@{/cart}">Cart</a>
+                    <a class="nav-link" th:href="@{/user/logout}">Logout</a>
+                </th:block>
+                <th:block sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/cart}">ADMIN PANEL</a>
+                    <a class="nav-link" th:href="@{/user/logout}">Logout</a>
+                </th:block>
             </nav>
         </div>
     </header>

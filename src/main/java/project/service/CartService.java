@@ -1,8 +1,7 @@
-package project.service;
+package project.Service;
 
 import org.springframework.stereotype.Service;
 import project.model.DTOS.ProductDTO;
-import project.model.entities.Product;
 
 import java.util.List;
 

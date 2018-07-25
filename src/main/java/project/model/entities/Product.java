@@ -3,7 +3,6 @@ package project.model.entities;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 
 @Entity
 @Table(name = "products")

@@ -16,8 +16,9 @@ public class User {
     private String username;
     private String password;
     private String address;
+    private String token;
 
-    @ManyToOne(targetEntity = Role.class, fetch = FetchType.LAZY, cascade=CascadeType.PERSIST)
+    @ManyToOne(targetEntity = Role.class, cascade=CascadeType.PERSIST)
     private Role role;
 
     public User() {
@@ -90,5 +91,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

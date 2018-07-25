@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductController {
 
     @GetMapping("/browse")
-    public String loginForm() {
+    public String browseProducts() {
         return "browse";
     }
 }

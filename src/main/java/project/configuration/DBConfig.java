@@ -1,19 +1,18 @@
 package project.configuration;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-
 import org.hibernate.jpa.HibernatePersistenceProvider;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.beans.PropertyVetoException;
@@ -33,7 +32,6 @@ public class DBConfig implements ApplicationContextAware, WebMvcConfigurer {
     private static final String Password = "db.password";
     private static final String Url = "db.url";
     private static final String Username = "db.username";
-//    private static final String dbName = "scaleshop";
 
     private static final String Dialect = "hibernate.dialect";
     private static final String SqlFormat = "hibernate.format_sql";
@@ -72,12 +70,5 @@ public class DBConfig implements ApplicationContextAware, WebMvcConfigurer {
         factoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         return factoryBean;
     }
-//
-//    @Bean
-//    public JpaTransactionManager geJpaTransactionManager() throws PropertyVetoException {
-//        JpaTransactionManager transactionManager = new JpaTransactionManager();
-//        transactionManager.setEntityManagerFactory(geEntityManagerFactoryBean().getObject());
-//        return transactionManager;
-//    }
 
 }

@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public class RoleRepositoryImpl implements RoleRepository {
@@ -33,5 +34,13 @@ public class RoleRepositoryImpl implements RoleRepository {
     @Transactional
     public void persist(Role role) {
         em.persist(role);
+    }
+
+    @Override
+    public List<Role> getAll() {
+        TypedQuery<Role> typedQuery = em
+                .createQuery("SELECT r FROM Role r" , Role.class);
+
+        return typedQuery.getResultList();
     }
 }
