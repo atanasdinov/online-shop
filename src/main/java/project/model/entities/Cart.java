@@ -13,7 +13,7 @@ public class Cart {
     private int id;
     private Double shipmentPrice;
     private Double totalPrice;
-    @OneToMany(mappedBy = "cart",cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Product> products;
 
     public Cart() {

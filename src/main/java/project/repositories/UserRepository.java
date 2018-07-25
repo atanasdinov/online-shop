@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface UserRepository {
     void add(User user, Role role);
+
     List<User> all();
+
     User getExistingUser(String username, String password);
+
     User getUserByUsername(String username);
 }

@@ -1,9 +1,7 @@
 package project.configuration;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-
 import org.hibernate.jpa.HibernatePersistenceProvider;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -15,7 +13,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 import java.beans.PropertyVetoException;
 import java.util.Properties;
 

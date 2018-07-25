@@ -3,7 +3,6 @@ package project.model.entities;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 
 @Entity
 @Table(name = "products")
@@ -15,14 +14,14 @@ public class Product {
     private Double price;
     @Nullable
     private byte[] picture;
-    @ManyToOne(targetEntity = Category.class,cascade = CascadeType.PERSIST)
-    @JoinColumn(name="category_id")
+    @ManyToOne(targetEntity = Category.class, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "category_id")
     private Category category;
     private String name;
     private String rating;
     private Integer quantity;
     @ManyToOne(targetEntity = Cart.class, cascade = CascadeType.PERSIST)
-    @JoinColumn(name="cart_id")
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     public Product() {
@@ -39,14 +38,14 @@ public class Product {
         this.name = name;
         this.quantity = quantity;
     }
-    public Product(Category category,Double price, String name, Integer quantity) {
-        this.category=category;
+
+    public Product(Category category, Double price, String name, Integer quantity) {
+        this.category = category;
         this.category.addProduct(this);
         this.price = price;
         this.name = name;
         this.quantity = quantity;
     }
-
 
     public int getId() {
         return id;

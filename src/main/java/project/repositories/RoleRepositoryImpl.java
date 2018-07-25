@@ -23,7 +23,7 @@ public class RoleRepositoryImpl implements RoleRepository {
     @Override
     public Role findRole(String name) {
         TypedQuery<Role> typedQuery = em
-                .createQuery("SELECT r FROM Role r WHERE r.name=:name" , Role.class)
+                .createQuery("SELECT r FROM Role r WHERE r.name=:name", Role.class)
                 .setParameter("name", name);
 
         return typedQuery.getSingleResult();

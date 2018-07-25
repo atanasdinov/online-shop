@@ -3,13 +3,10 @@ package project.repositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import project.model.entities.Category;
-import project.model.entities.Product;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -43,14 +40,14 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Transactional
     public List<Category> all() {
         return (List<Category>) em
-                .createNativeQuery("select * from categories",Category.class)
+                .createNativeQuery("select * from categories", Category.class)
                 .getResultList();
     }
 
     @Override
     public boolean doExist(String categoryName) {
         List resultList = em.createNativeQuery("select * from categories as c where c.name=:name", Category.class)
-                .setParameter("name",categoryName)
+                .setParameter("name", categoryName)
                 .getResultList();
 
         return resultList.size() != 0;

@@ -26,45 +26,56 @@ public class ProductServiceImpl implements ProductService {
         this.modelMapper = new ModelMapper();
     }
 
+    //    @Secured("ROLE_ADMIN")
     @Override
     public void add(ProductDTO productDTO, String categoryName) {
-        if(categoryName==null) {
-            throw new NullPointerException("category name must not be null");
+        if (categoryName == null) {
+            throw new NullPointerException("category name must not be null!");
         }
+        Category category = modelMapper.map(categoryRepository.get(categoryName), Category.class);
+        Product product = new Product(category, productDTO.getPrice(), productDTO.getName(), productDTO.getQuantity());
+        productRepository.persist(product);
+    }
 
-        Category category = this.modelMapper.map(categoryRepository.get(categoryName), Category.class);
-        Product product = new Product(category,productDTO.getPrice(), productDTO.getName(), productDTO.getQuantity());
-        this.productRepository.persist(product);
+    //    @Secured("ROLE_ADMIN")
+    @Override
+    public boolean remove(String productName) {
+        if (productName == null)
+            throw new NullPointerException("Product name must not be null!");
+
+        productRepository.delete(productName);
+        return false;
     }
 
     @Override
-    public ProductDTO get(String name) {
-        if(name==null) {
+    public ProductDTO get(String productName) {
+        if (productName == null) {
             throw new NullPointerException("product name must not be null");
         }
-        Product product = this.productRepository.get(name);
-        return modelMapper.map(product,ProductDTO.class);
+        Product product = productRepository.get(productName);
+        return modelMapper.map(product, ProductDTO.class);
     }
 
     @Override
     public List<ProductDTO> all() {
         List<ProductDTO> productDTOS = new ArrayList<>();
-        for (Product product : this.productRepository.all()) {
-            productDTOS.add(this.modelMapper.map(product,ProductDTO.class));
+        for (Product product : productRepository.all()) {
+            productDTOS.add(modelMapper.map(product, ProductDTO.class));
         }
         return productDTOS;
     }
 
     @Override
     public List<ProductDTO> allFromCategory(String categoryName) {
-        if(categoryName==null) {
+        if (categoryName == null) {
             throw new NullPointerException("category name must not be null");
         }
-        List<Product> products = this.productRepository.allByCategory(categoryName);
+        List<Product> products = productRepository.allByCategory(categoryName);
         List<ProductDTO> productDTOS = new ArrayList<>();
         for (Product product : products) {
-            productDTOS.add(this.modelMapper.map(product,ProductDTO.class));
+            productDTOS.add(modelMapper.map(product, ProductDTO.class));
         }
         return productDTOS;
     }
+
 }

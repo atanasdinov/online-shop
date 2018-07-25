@@ -1,14 +1,9 @@
 package project.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import project.model.DTOS.CategoryDTO;
-import project.model.DTOS.ProductDTO;
-import project.service.CategoryService;
-import project.service.ProductService;
 
 
 @Controller
@@ -25,7 +20,7 @@ public class HomeController {
 //    }
 
     @GetMapping({"", "/home"})
-    public String index(Model model){
+    public String index(Model model) {
         return "home";
     }
 

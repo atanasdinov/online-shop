@@ -35,12 +35,13 @@ public class CartRepositoryImpl implements CartRepository {
     @Transactional
     public void addProduct(int cartId, Product product) {
         em.createNativeQuery("update carts c set c.totalPrice=c.totalPrice+:productPrice where c.id=:cartId", Cart.class)
-                .setParameter("productPrice",product.getPrice())
-                .setParameter("cartId",cartId)
+                .setParameter("productPrice", product.getPrice())
+                .setParameter("cartId", cartId)
                 .executeUpdate();
-        em.createNativeQuery("update products p set p.cart_id=:cartId where p.id=:productId", Product.class)
-                .setParameter("productId",product.getId())
-                .setParameter("cartId",cartId)
+
+        em.createNativeQuery("update products p set p.cart_id=:cartId, p.quantity=p.quantity-1 where p.id=:productId", Product.class)
+                .setParameter("productId", product.getId())
+                .setParameter("cartId", cartId)
                 .executeUpdate();
     }
 
@@ -48,23 +49,40 @@ public class CartRepositoryImpl implements CartRepository {
     @Transactional
     public void removeProduct(int cartId, Product product) {
         em.createNativeQuery("update carts c set c.totalPrice=c.totalPrice-:productPrice where c.id=:cartId", Cart.class)
-                .setParameter("productPrice",product.getPrice())
-                .setParameter("cartId",cartId)
+                .setParameter("productPrice", product.getPrice())
+                .setParameter("cartId", cartId)
                 .executeUpdate();
-        em.createNativeQuery("update products p set p.cart_id=null where p.id=:productId", Product.class)
-                .setParameter("productId",product.getId()).executeUpdate();
+
+        em.createNativeQuery("update products p set p.cart_id=null, p.quantity=p.quantity+1 where p.id=:productId", Product.class)
+                .setParameter("productId", product.getId())
+                .executeUpdate();
     }
 
     @Override
+    @Transactional
+    public void removeAllProducts(int cartId) {
+        em.createNativeQuery("update products p set p.cart_id=null", Product.class)
+                .executeUpdate();
+    }
+
+    @Override
+    @Transactional
     public List<Product> getProducts(int cartId) {
-        return  (List<Product>) em.createNativeQuery("select * from products p where p.cart_id=:cartId", Product.class)
-                .setParameter("cartId",cartId).getResultList();
+        return (List<Product>) em.createNativeQuery("select * from products p where p.cart_id=:cartId", Product.class)
+                .setParameter("cartId", cartId)
+                .getResultList();
     }
 
     @Override
+    @Transactional
     public boolean doesExist(int cartId) {
-        return em.createNativeQuery("select * from carts c where c.id=:cartId", Cart.class)
-                .setParameter("cartId",cartId).getResultList().size()!=0;
+//        return em.createNativeQuery("select * from carts c where c.id=:cartId", Cart.class)
+//                .setParameter("cartId", cartId)
+//                .getResultList().size() != 0;
+        return !(em.createNativeQuery("select * from carts c where c.id=:cartId", Cart.class)
+                .setParameter("cartId", cartId)
+                .getResultList()
+                .isEmpty());
     }
 
 }
