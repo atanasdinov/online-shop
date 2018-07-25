@@ -7,19 +7,20 @@ import java.util.List;
 @Entity
 @Table(name = "carts")
 public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @OneToMany(mappedBy = "cart")
+    private int id;
+    private Double shipmentPrice;
+    private Double totalPrice;
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     private List<Product> products;
-    private Integer shipmentPrice;
-    private Integer totalPrice;
 
     public Cart() {
         this.products = new ArrayList<>();
     }
 
-    public Cart(List<Product> products, Integer shipmentPrice, Integer totalPrice) {
+    public Cart(List<Product> products, Double shipmentPrice, Double totalPrice) {
         this.products = products;
         this.shipmentPrice = shipmentPrice;
         this.totalPrice = totalPrice;
@@ -37,19 +38,19 @@ public class Cart {
         this.products = products;
     }
 
-    public Integer getShipmentPrice() {
+    public Double getShipmentPrice() {
         return shipmentPrice;
     }
 
-    public void setShipmentPrice(Integer shipmentPrice) {
+    public void setShipmentPrice(Double shipmentPrice) {
         this.shipmentPrice = shipmentPrice;
     }
 
-    public Integer getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 }

@@ -1,8 +1,6 @@
 package project.service;
 
 import project.model.DTOS.ProductDTO;
-import project.model.entities.Category;
-import project.model.entities.Product;
 
 import java.util.List;
 

@@ -1,9 +1,11 @@
 package project.model.entities;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 @Entity
 @Table(name = "categories")
 public class Category {

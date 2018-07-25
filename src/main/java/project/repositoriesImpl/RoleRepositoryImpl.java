@@ -1,5 +1,4 @@
 package project.repositoriesImpl;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import project.model.entities.Role;
@@ -14,8 +13,12 @@ import javax.transaction.Transactional;
 public class RoleRepositoryImpl implements RoleRepository {
 
     @PersistenceContext
-    @Autowired
     private EntityManager em;
+
+    @Autowired
+    public RoleRepositoryImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     public Role findRole(String name) {
