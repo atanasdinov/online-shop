@@ -19,13 +19,6 @@ public class AdminController {
         this.productService = productService;
     }
 
-    /* TODO:
-     *   Да се map-не този backend с frontend-a.
-     *   Работа по ERROR HANDLING-a. За момента съм
-     *   написал само redirect:/error (което несъществува
-     *   като страница).
-     */
-
     @PostMapping("/addProduct")
     public String addProduct(@ModelAttribute ProductDTO productDTO, String categoryName) {
         try {

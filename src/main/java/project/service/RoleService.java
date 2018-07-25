@@ -1,6 +1,7 @@
-package project.Service;
+package project.service;
 
 import project.model.entities.Role;
+import java.util.List;
 
 public interface RoleService {
     List<Role> getAll();

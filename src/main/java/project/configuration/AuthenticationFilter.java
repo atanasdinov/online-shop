@@ -6,10 +6,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.util.WebUtils;
-import project.Service.RoleService;
-import project.Service.UserService;
+import project.service.RoleService;
+import project.service.UserService;
 import project.model.entities.User;
-
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

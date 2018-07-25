@@ -21,14 +21,9 @@ public class BrowseController {
         this.productService = productService;
     }
 
-    /* TODO:
-     *   showAll() методът взима от базата с данни наличните
-     *   продукти и ги записва в списъка allProducts.
-     *   От там нататък вече трябва да се навържат с front-end.
-     */
     @GetMapping("/showAll")
     public ResponseEntity<List<ProductDTO>> showAll() {
-        List<ProductDTO> allProducts = productService.all();
+        List<ProductDTO> allProducts = productService.all();    // All the products available in the DB
         return ResponseEntity.ok(allProducts);
     }
 }

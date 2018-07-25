@@ -20,10 +20,6 @@ public class CartController {
     }
 
     // TODO: Use "Principal" in order to get a given user's cartId and update it as required...
-    /*  Има работа по мапване на бакенд с фронтед;
-     *  Error handling и адекватен response от контролерите;
-     *
-     */
 
     @PostMapping("/addItem")
     public String addToCart(@ModelAttribute ProductDTO productDTO) {

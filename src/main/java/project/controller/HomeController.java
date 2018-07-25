@@ -20,7 +20,6 @@ public class HomeController {
         if(cookie != null) {
             model.addAttribute("username", principal.getName());
         }
-
         return "home";
     }
 }

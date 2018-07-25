@@ -54,7 +54,6 @@ public class UserController {
         }
     }
 
-
     @GetMapping("/logout")
     @PreAuthorize(value = "isAuthenticated()")
     public String logout(@CookieValue(value = "token", required = false) Cookie cookie,

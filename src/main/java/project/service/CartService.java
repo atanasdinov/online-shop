@@ -1,4 +1,4 @@
-package project.Service;
+package project.service;
 
 import org.springframework.stereotype.Service;
 import project.exception.InvalidCartException;
