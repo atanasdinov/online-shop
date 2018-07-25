@@ -13,4 +13,6 @@ public interface UserRepository {
     User getExistingUser(String username, String password);
 
     User getUserByUsername(String username);
+    User checkToken(String token);
+    void setToken(String token, User user);
 }

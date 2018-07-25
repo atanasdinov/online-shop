@@ -1,4 +1,4 @@
-package project.service;
+package project.Service;
 
 import project.model.DTOS.ProductDTO;
 

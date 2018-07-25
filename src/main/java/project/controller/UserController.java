@@ -1,15 +1,17 @@
 package project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
 import project.model.DTOS.UserLoginDTO;
 import project.model.DTOS.UserRegisterDTO;
 import project.service.UserService;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 
 @Controller
@@ -30,7 +32,6 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    //@PreAuthorize(value = "hasAnyRole()")
     public String register(@ModelAttribute UserRegisterDTO userRegisterDTO) {
         userService.register(userRegisterDTO);
         return "redirect:/user/login";
@@ -43,9 +44,28 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UserLoginDTO user) {
-        userService.login(user);
-        return "home";
+    public String login(@ModelAttribute UserLoginDTO user,
+                        HttpServletResponse response) {
+
+        if(!userService.login(user, response))
+            return "redirect:/user/login?error";
+        else {
+            return "redirect:/home";
+        }
+    }
+
+
+    @GetMapping("/logout")
+    @PreAuthorize(value = "isAuthenticated()")
+    public String logout(@CookieValue(value = "token", required = false) Cookie cookie,
+                         HttpServletResponse response) {
+
+        if(cookie!=null) {
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        }
+        return "redirect:/home";
     }
 
 }

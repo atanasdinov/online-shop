@@ -2,10 +2,13 @@ package project.service;
 
 import project.model.DTOS.UserLoginDTO;
 import project.model.DTOS.UserRegisterDTO;
+import project.model.entities.User;
+import javax.servlet.http.HttpServletResponse;
 
 
 public interface UserService {
     void register(UserRegisterDTO userRegisterDTO);
-
-    UserLoginDTO login(UserLoginDTO userLoginDTO);
+    boolean login(UserLoginDTO userLoginDTO, HttpServletResponse response);
+    User checkToken(String token);
+    String addToken(User user);
 }
