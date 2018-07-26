@@ -24,33 +24,42 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Transactional
     public void persist(Product product) {
         em.createNativeQuery("insert into products (name,price,quantity,rating,category_id) values (:name,:price,:quantity,:rating,:categoryId)")
-            .setParameter("name",product.getName())
-            .setParameter("price",product.getPrice())
-            .setParameter("quantity",product.getQuantity())
-            .setParameter("rating",product.getRating())
-            .setParameter("categoryId",product.getCategory().getId()).executeUpdate();
+                .setParameter("name", product.getName())
+                .setParameter("price", product.getPrice())
+                .setParameter("quantity", product.getQuantity())
+                .setParameter("rating", product.getRating())
+                .setParameter("categoryId", product.getCategory().getId());
     }
 
     @Override
     @Transactional
-    public Product get(String name) {
+    public void delete(long id) {
+        em.createNativeQuery("delete from products where id=:id", Product.class)
+                .setParameter("id", id)
+                .executeUpdate();
+    }
 
+    @Override
+    @Transactional
+    public Product get(long id) {
         return (Product) em
-                .createNativeQuery("select * from products where name=:name", Product.class)
-                .setParameter("name",name).getSingleResult();
+                .createNativeQuery("select * from products where id=:id", Product.class)
+                .setParameter("id", id)
+                .getSingleResult();
     }
 
     @Override
     @Transactional
     public List<Product> all() {
-        return (List<Product>) em.createNativeQuery("select * from products",Product.class).getResultList();
+        return (List<Product>) em.createNativeQuery("select * from products", Product.class).getResultList();
     }
 
     @Override
+    @Transactional
     public List<Product> allByCategory(String categoryName) {
         return (List<Product>) em
                 .createNativeQuery("SELECT * FROM products as p left join categories as c on p.category_id=c.id where c.name=:name", Product.class)
-                .setParameter("name",categoryName).getResultList();
+                .setParameter("name", categoryName).getResultList();
     }
-    
+
 }

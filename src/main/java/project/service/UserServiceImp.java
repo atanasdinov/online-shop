@@ -5,8 +5,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.model.DTOS.UserLoginDTO;
 import project.model.DTOS.UserRegisterDTO;
+import project.model.entities.Cart;
 import project.model.entities.Role;
 import project.model.entities.User;
+import project.repositories.CartRepository;
 import project.repositories.UserRepository;
 import project.utils.ModelParser;
 
@@ -22,13 +24,15 @@ public class UserServiceImp implements UserService {
     private ModelParser modelParser;
     private RoleService roleService;
     private BCryptPasswordEncoder passwordEncoder;
+    private CartRepository cartRepository;
 
     @Autowired
-    public UserServiceImp(UserRepository userRepository, ModelParser modelParser, RoleService roleService, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImp(UserRepository userRepository, ModelParser modelParser, RoleService roleService, BCryptPasswordEncoder passwordEncoder, CartRepository cartRepository) {
         this.userRepository = userRepository;
         this.modelParser = modelParser;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+        this.cartRepository = cartRepository;
     }
 
     @Override
@@ -49,6 +53,11 @@ public class UserServiceImp implements UserService {
         } else {
             role = this.roleService.get("USER");
         }
+
+        this.cartRepository.persist();
+        Cart cart = this.cartRepository.getCart(this.cartRepository.all().size());
+        user.setCart(cart);
+        cart.setUser(user);
 
         role.getUsers().add(user);
         user.setRole(role);
@@ -92,6 +101,11 @@ public class UserServiceImp implements UserService {
         user.setToken(token);
         userRepository.setToken(token, user);
         return token;
+    }
+
+    @Override
+    public User getUser(String name) {
+        return userRepository.getUserByUsername(name);
     }
 
 }

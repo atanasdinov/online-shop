@@ -24,23 +24,24 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void create(CategoryDTO category) {
-        Category entity = this.modelParser.convert(category, Category.class);
+        Category entity = modelParser.convert(category, Category.class);
         categoryRepository.persist(entity);
     }
 
     @Override
     public CategoryDTO get(String name) {
         Category category = categoryRepository.get(name);
-        return this.modelParser.convert(category, CategoryDTO.class);
+        return modelParser.convert(category, CategoryDTO.class);
     }
 
     @Override
     public List<CategoryDTO> all() {
         List<CategoryDTO> categoryDTOS = new ArrayList<>();
-        List<Category> all = this.categoryRepository.all();
+        List<Category> all = categoryRepository.all();
         for (Category category : all) {
-            categoryDTOS.add(this.modelParser.convert(category,CategoryDTO.class));
+            categoryDTOS.add(modelParser.convert(category, CategoryDTO.class));
         }
         return categoryDTOS;
     }
+
 }

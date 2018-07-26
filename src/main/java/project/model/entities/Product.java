@@ -3,6 +3,7 @@ package project.model.entities;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -10,7 +11,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private Double price;
     @Nullable
     private byte[] picture;
@@ -20,9 +21,9 @@ public class Product {
     private String name;
     private String rating;
     private Integer quantity;
-    @ManyToOne(targetEntity = Cart.class, cascade = CascadeType.PERSIST)
+    @ManyToMany(targetEntity = Cart.class, cascade = CascadeType.PERSIST)
     @JoinColumn(name="cart_id")
-    private Cart cart;
+    private List<Cart> cart;
 
     public Product() {
     }
@@ -47,7 +48,7 @@ public class Product {
     }
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -99,11 +100,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public Cart getCart() {
+    public List<Cart> getCart() {
         return cart;
     }
 
-    public void setCart(Cart cart) {
+    public void setCart(List<Cart> cart) {
         this.cart = cart;
     }
 }

@@ -6,7 +6,12 @@ import java.util.List;
 
 public interface ProductRepository {
     void persist(Product product);
-    Product get(String name);
+
+    void delete(long id);
+
+    Product get(long id);
+
     List<Product> all();
+
     List<Product> allByCategory(String categoryName);
 }

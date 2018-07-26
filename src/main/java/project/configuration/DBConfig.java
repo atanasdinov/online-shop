@@ -28,16 +28,9 @@ public class DBConfig implements ApplicationContextAware, WebMvcConfigurer {
 
     private ApplicationContext applicationContext;
 
-    private static final String Driver = "db.driver";
-    private static final String Password = "db.password";
-    private static final String Url = "db.url";
-    private static final String Username = "db.username";
-
-    private static final String Dialect = "hibernate.dialect";
-    private static final String SqlFormat = "hibernate.format_sql";
-    private static final String SqlShow = "hibernate.show_sql";
-    private static final String Scan = "entitymanager.packages.to.scan";
-    private static final String Hbm2DDL = "hibernate.hbm2ddl.auto";
+    private static final String PASSWORD = "db.password";
+    private static final String URL = "db.url";
+    private static final String USERNAME = "db.username";
 
     @Autowired
     private Environment env;
@@ -49,10 +42,9 @@ public class DBConfig implements ApplicationContextAware, WebMvcConfigurer {
     @Bean
     public MysqlDataSource dataSource() throws IllegalStateException, PropertyVetoException {
         MysqlDataSource dataSource = new MysqlDataSource();
-//        dataSource.setDatabaseName(env.getProperty(dbName));
-        dataSource.setUser(env.getProperty(Username));
-        dataSource.setPassword(env.getProperty(Password));
-        dataSource.setURL(env.getProperty(Url));
+        dataSource.setUser(env.getProperty(USERNAME));
+        dataSource.setPassword(env.getProperty(PASSWORD));
+        dataSource.setURL(env.getProperty(URL));
 
         return dataSource;
     }

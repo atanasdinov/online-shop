@@ -21,6 +21,10 @@ public class User {
     @ManyToOne(targetEntity = Role.class, cascade=CascadeType.PERSIST)
     private Role role;
 
+
+    @OneToOne(targetEntity = Cart.class, cascade=CascadeType.PERSIST)
+    private Cart cart;
+
     public User() {
     }
 
@@ -99,5 +103,13 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }
