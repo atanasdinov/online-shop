@@ -18,10 +18,12 @@
                 <strong>Browse products</strong>
             </a>
             <div style="width: 30%;text-align: right;">
+                <div sec:authorize="isAnonymous()" style="float: right; margin-left: 5px;" >
+                    <a class="navbar-toggler" th:href="@{/user/register}">Sign up</a>
+                    <a class="navbar-toggler" th:href="@{/user/login}">Sign in</a>
+                </div>
                 <div sec:authorize="hasRole('USER')" style="float: right; margin-left: 5px;">
-                    <a class="navbar-toggler" th:href="@{/cart}">
-                        <span style="font-size: 18px" class="glyphicon glyphicon-shopping-cart"></span>Cart
-                    </a>
+                    <a class="navbar-toggler" th:href="@{/cart}">Cart</a>
                 </div>
                 <div sec:authorize="hasRole('ADMIN')" style="float: right; margin-left: 5px;">
                     <a class="navbar-toggler" th:href="@{/products/create}">Create Product</a>
@@ -59,9 +61,6 @@
                         </ul>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <div sec:authorize="isAnonymous()" text-align="center">
-                                    <button type="button" class="btn btn-default btn-sm">Details</button>
-                                </div>
                                 <form th:action="@{/cart/addItem/{productId}(productId=*{id})}"
                                       sec:authorize="hasRole('USER')" method="post">
                                     <button type="submit" class="btn btn-default btn-sm">

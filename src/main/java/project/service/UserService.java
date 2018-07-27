@@ -12,4 +12,5 @@ public interface UserService {
     boolean login(UserLoginDTO userLoginDTO, HttpServletResponse response);
     User checkToken(String token);
     String addToken(User user);
+    User getUser(String name);
 }
