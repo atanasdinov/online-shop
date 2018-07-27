@@ -5,10 +5,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.Service.ProductService;
 import project.model.DTOS.ProductDTO;
+import project.service.specification.ProductService;
 
 import java.util.List;
+
 
 @Controller
 @RequestMapping("/products")
@@ -23,16 +24,15 @@ public class ProductController {
 
     @GetMapping("/browse")
     public String browse(Model model) {
-        List<ProductDTO> allProducts = productService.all();
-
+        List<ProductDTO> allProducts = productService.getAllProducts();
         model.addAttribute("productList", allProducts);
+
         return "browse";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/create")
-    public String createProductForm(@ModelAttribute ProductDTO productDTO,
-                                Model model){
+    public String createProductForm(@ModelAttribute ProductDTO productDTO, Model model) {
         model.addAttribute("product", productDTO);
 
         return "create-product";
@@ -40,8 +40,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
-    public String createProduct(@ModelAttribute ProductDTO productDTO,
-                                Model model){
+    public String createProduct(@ModelAttribute ProductDTO productDTO, Model model) {
         productService.add(productDTO);
 
         return "redirect:/products/browse";
@@ -49,11 +48,11 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/remove/{id}")
-    public String removeProduct(@PathVariable ("id") long id) {
+    public String removeProduct(@PathVariable("id") long id) {
         try {
-            productService.remove(id);
+            productService.removeProductById(id);
         } catch (NullPointerException e) {
-            return "redirect:/error";
+            return "error";
         }
         return "redirect:/products/browse";
     }

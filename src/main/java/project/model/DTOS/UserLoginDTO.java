@@ -1,8 +1,15 @@
 package project.model.DTOS;
 
+import javax.validation.constraints.NotEmpty;
+
 public class UserLoginDTO {
 
+    private static final String EMPTY_FIELD_MESSAGE = "Field must not be empty";
+
+    @NotEmpty(message = EMPTY_FIELD_MESSAGE)
     private String username;
+
+    @NotEmpty(message = EMPTY_FIELD_MESSAGE)
     private String password;
 
     public UserLoginDTO() {

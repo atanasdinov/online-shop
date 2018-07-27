@@ -1,30 +1,31 @@
 package project.model.entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+
 
 @Entity
 @Table(name = "carts")
 public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToMany(mappedBy = "cart")
     private Set<Product> products;
+
     private Double shipmentPrice;
     private Double totalPrice;
 
-    @OneToOne(mappedBy = "cart", fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+    @OneToOne(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private User user;
 
     public Cart() {
         this.products = new HashSet<>();
-        this.shipmentPrice=0.0;
-        this.totalPrice=0.0;
+        this.shipmentPrice = 0.0;
+        this.totalPrice = 0.0;
     }
 
     public Cart(Set<Product> products, Double shipmentPrice, Double totalPrice) {
@@ -68,6 +69,4 @@ public class Cart {
     public void setUser(User user) {
         this.user = user;
     }
-
-
 }

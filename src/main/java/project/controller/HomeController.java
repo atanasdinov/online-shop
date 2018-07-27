@@ -19,11 +19,8 @@ public class HomeController {
                         @CookieValue(value = "token", required = false) Cookie cookie,
                         Principal principal) {
 
-
-        if(cookie != null) {
+        if (cookie != null)
             model.addAttribute("username", principal.getName());
-        }
-
         return "home";
     }
 
@@ -32,10 +29,8 @@ public class HomeController {
         return "contact";
     }
 
-
     @GetMapping("/thanks")
     public String thanks() {
         return "thanks";
     }
-
 }

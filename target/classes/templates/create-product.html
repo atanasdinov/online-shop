@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Create product</title>
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link th:href = "@{/css/signup.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body class="text-center">
+<form class="form-signup" action="#" th:action="@{/products/create}" th:object="${product}" method="post">
+    <h1 class="h3 mb-3 font-weight-normal">Create product</h1>
+
+    <label for="inputCategory" class="sr-only">Category</label>
+    <input type="text" th:field="*{categoryName}" id="inputCategory" class="form-control" placeholder="Category" required  >
+
+    <p></p>
+
+    <label for="inputName" class="sr-only">Name</label>
+    <input type="text" id="inputName" class="form-control" placeholder="Name" th:field="*{name}" required>
+
+    <label for="inputQuantity" class="sr-only">Quantity</label>
+    <input type="text" id="inputQuantity" class="form-control" placeholder="Quantity" th:field="*{quantity}" required>
+
+    <label for="inputPrice" class="sr-only">First name</label>
+    <input type="text" id="inputPrice" class="form-control" placeholder="Price" th:field="*{price}" required autofocus>
+
+    <p></p>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+</form>
+</body>
+</html>

@@ -14,7 +14,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 import java.beans.PropertyVetoException;
 import java.util.Properties;
 
@@ -22,11 +21,9 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan
-@EnableJpaRepositories(basePackages = { "project/repositories" })
-@PropertySource(value={"classpath:application.properties"})
+@EnableJpaRepositories(basePackages = {"project/repository"})
+@PropertySource(value = {"classpath:application.properties"})
 public class DBConfig implements ApplicationContextAware, WebMvcConfigurer {
-
-    private ApplicationContext applicationContext;
 
     private static final String PASSWORD = "db.password";
     private static final String URL = "db.url";
@@ -34,6 +31,8 @@ public class DBConfig implements ApplicationContextAware, WebMvcConfigurer {
 
     @Autowired
     private Environment env;
+
+    private ApplicationContext applicationContext;
 
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
@@ -50,17 +49,17 @@ public class DBConfig implements ApplicationContextAware, WebMvcConfigurer {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean geEntityManagerFactoryBean() throws PropertyVetoException {
+    public LocalContainerEntityManagerFactoryBean getEntityManagerFactoryBean() throws PropertyVetoException {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.show_sql","true");
+        properties.setProperty("hibernate.show_sql", "true");
 
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource());
         factoryBean.setPackagesToScan("project.model");
         factoryBean.setJpaProperties(properties);
         factoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+
         return factoryBean;
     }
-
 }

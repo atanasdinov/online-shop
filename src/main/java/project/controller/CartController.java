@@ -4,17 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import project.Service.CartService;
-import project.Service.ProductService;
-import project.Service.UserService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import project.exception.InvalidCartException;
 import project.exception.InvalidProductException;
 import project.model.DTOS.ProductDTO;
 import project.model.entities.User;
+import project.service.specification.CartService;
+import project.service.specification.ProductService;
+import project.service.specification.UserService;
 
 import java.security.Principal;
 import java.util.List;
+
 
 @Controller
 @PreAuthorize("hasRole('USER')")
@@ -32,52 +36,48 @@ public class CartController {
         this.productService = productService;
     }
 
-
     @GetMapping
-    public String viewCart(Model model,
-                           Principal principal) {
+    public String viewCart(Model model, Principal principal) {
         User loggedIn = userService.getUser(principal.getName());
-        List<ProductDTO> allProducts = cartService.getProducts(loggedIn.getCart().getId());
-
-        model.addAttribute("cartId", loggedIn.getCart().getId());
-        model.addAttribute("products", allProducts);
-        model.addAttribute("totalPrice", cartService.getTotalPrice(loggedIn.getCart().getId()));
+        try {
+            List<ProductDTO> allProducts = cartService.getProducts(loggedIn.getCart().getId());
+            model.addAttribute("cartId", loggedIn.getCart().getId());
+            model.addAttribute("products", allProducts);
+            model.addAttribute("totalPrice", cartService.getTotalPrice(loggedIn.getCart().getId()));
+        } catch (InvalidCartException e) {
+            return "error";
+        }
         return "cart";
     }
 
     @PostMapping("/addItem/{productId}")
-    public String addToCart(@PathVariable("productId") long productId,
-                            Principal principal) {
+    public String addToCart(@PathVariable("productId") long productId, Principal principal) {
         try {
             User loggedIn = userService.getUser(principal.getName());
-
             cartService.addProduct(loggedIn.getCart().getId(), productId);
         } catch (InvalidProductException | InvalidCartException e) {
-            return "redirect:/error";
+            return "redirect:/cart";
         }
         return "redirect:/cart";
     }
 
     @PostMapping("/removeItem/{productId}")
-    public String removeFromCart(@PathVariable("productId") Long productId,
-                                 Principal principal) {
+    public String removeFromCart(@PathVariable("productId") Long productId, Principal principal) {
         try {
             User loggedIn = userService.getUser(principal.getName());
-
             cartService.removeProduct(loggedIn.getCart().getId(), productId);
         } catch (InvalidProductException | InvalidCartException e) {
-            return "redirect:/error";
+            return "redirect:/cart";
         }
         return "redirect:/cart";
     }
-
 
     @PostMapping("/emptyCart/{cartId}")
     public String emptyCart(@PathVariable("cartId") long cartId) {
         try {
             cartService.removeAll(cartId);
         } catch (InvalidCartException e) {
-            return "redirect:/error";
+            return "error";
         }
         return "redirect:/cart";
     }
@@ -87,7 +87,4 @@ public class CartController {
         // TODO (in a later release): Update database after purchase is finalized!
         return "redirect:/success";     // TODO: A simple HTML page for a successful purchase
     }
-
-
-
 }
