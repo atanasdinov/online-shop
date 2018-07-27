@@ -2,6 +2,7 @@ package project.model.entities;
 
 import javax.persistence.*;
 
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -13,12 +14,19 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+
+    @Column(unique = true)
     private String username;
+
     private String password;
     private String address;
+    private String token;
 
-    @ManyToOne(targetEntity = Role.class, fetch = FetchType.LAZY, cascade=CascadeType.PERSIST)
+    @ManyToOne(targetEntity = Role.class, cascade = CascadeType.PERSIST)
     private Role role;
+
+    @OneToOne(targetEntity = Cart.class, cascade = CascadeType.PERSIST)
+    private Cart cart;
 
     public User() {
     }
@@ -72,6 +80,10 @@ public class User {
         return address;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -80,15 +92,27 @@ public class User {
         this.email = email;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public Role getRole() {
         return role;
     }
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

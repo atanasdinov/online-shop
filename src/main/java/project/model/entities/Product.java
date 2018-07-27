@@ -3,25 +3,33 @@ package project.model.entities;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.math.BigInteger;
+import java.util.List;
+
 
 @Entity
 @Table(name = "products")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
+
     private Double price;
+
     @Nullable
     private byte[] picture;
-    @ManyToOne(targetEntity = Category.class,cascade = CascadeType.PERSIST)
-    @JoinColumn(name="category_id")
+
+    @ManyToOne(targetEntity = Category.class, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "category_id")
     private Category category;
+
     private String name;
     private String rating;
     private Integer quantity;
-    @ManyToOne(targetEntity = Cart.class, cascade = CascadeType.ALL)
-    private Cart cart;
+
+    @ManyToMany(targetEntity = Cart.class, cascade = CascadeType.PERSIST)
+    @JoinColumn(name="cart_id")
+    private List<Cart> cart;
 
     public Product() {
     }
@@ -37,16 +45,16 @@ public class Product {
         this.name = name;
         this.quantity = quantity;
     }
-    public Product(Category category,Double price, String name, Integer quantity) {
-        this.category=category;
+
+    public Product(Category category, Double price, String name, Integer quantity) {
+        this.category = category;
         this.category.addProduct(this);
         this.price = price;
         this.name = name;
         this.quantity = quantity;
     }
 
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -98,11 +106,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public Cart getCart() {
+    public List<Cart> getCart() {
         return cart;
     }
 
-    public void setCart(Cart cart) {
+    public void setCart(List<Cart> cart) {
         this.cart = cart;
     }
 }

@@ -2,11 +2,11 @@ package project.model.DTOS;
 
 public class UserRegisterDTO {
 
+    private String username;
+    private String password;
     private String firstName;
     private String lastName;
     private String email;
-    private String username;
-    private String password;
     private String address;
 
     public UserRegisterDTO() {

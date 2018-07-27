@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -13,9 +12,11 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(unique = true)
     private String name;
-    @OneToMany(mappedBy = "category",cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Product> products;
 
     public Category() {
@@ -27,13 +28,13 @@ public class Category {
         this.name = name;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public Category(String name, List<Product> products) {
         this.name = name;
         this.products = products;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
