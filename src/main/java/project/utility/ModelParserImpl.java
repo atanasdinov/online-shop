@@ -1,8 +1,8 @@
-package project.utils;
+package project.utility;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class ModelParserImpl implements ModelParser {
@@ -16,7 +16,7 @@ public class ModelParserImpl implements ModelParser {
     @Override
     public <S, D> D convert(S source, Class<D> destinationClass) {
         D convertedObject = null;
-        convertedObject = this.modelMapper.map(source, destinationClass);
+        convertedObject = modelMapper.map(source, destinationClass);
         return convertedObject;
     }
 }

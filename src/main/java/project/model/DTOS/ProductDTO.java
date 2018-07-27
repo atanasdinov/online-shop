@@ -1,19 +1,19 @@
 package project.model.DTOS;
 
 public class ProductDTO {
-    private Double price;
-    private byte[] picture;
+
+    private long id;
+    private String categoryName;
     private String name;
-    private String rating;
+    private Double price;
     private Integer quantity;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Double price, String name, String rating, Integer quantity) {
+    public ProductDTO(Double price, String name, Integer quantity) {
         this.price = price;
         this.name = name;
-        this.rating = rating;
         this.quantity = quantity;
     }
 
@@ -25,14 +25,6 @@ public class ProductDTO {
         this.price = price;
     }
 
-    public byte[] getPicture() {
-        return picture;
-    }
-
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
-    }
-
     public String getName() {
         return name;
     }
@@ -41,19 +33,27 @@ public class ProductDTO {
         this.name = name;
     }
 
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
     public Integer getQuantity() {
         return quantity;
     }
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

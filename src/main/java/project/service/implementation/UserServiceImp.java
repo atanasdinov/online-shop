@@ -1,14 +1,18 @@
-package project.service;
+package project.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.model.DTOS.UserLoginDTO;
 import project.model.DTOS.UserRegisterDTO;
+import project.model.entities.Cart;
 import project.model.entities.Role;
 import project.model.entities.User;
-import project.repositories.UserRepository;
-import project.utils.ModelParser;
+import project.repository.specification.CartRepository;
+import project.repository.specification.UserRepository;
+import project.service.specification.RoleService;
+import project.service.specification.UserService;
+import project.utility.ModelParser;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -22,44 +26,47 @@ public class UserServiceImp implements UserService {
     private ModelParser modelParser;
     private RoleService roleService;
     private BCryptPasswordEncoder passwordEncoder;
+    private CartRepository cartRepository;
 
     @Autowired
-    public UserServiceImp(UserRepository userRepository, ModelParser modelParser, RoleService roleService, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImp(UserRepository userRepository, ModelParser modelParser, RoleService roleService, BCryptPasswordEncoder passwordEncoder, CartRepository cartRepository) {
         this.userRepository = userRepository;
         this.modelParser = modelParser;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+        this.cartRepository = cartRepository;
     }
 
     @Override
     public void register(UserRegisterDTO userRegisterDTO) {
         Role role;
-
         User user = new User(userRegisterDTO.getFirstName(),
                 userRegisterDTO.getLastName(),
                 userRegisterDTO.getEmail(),
                 userRegisterDTO.getUsername(),
-                passwordEncoder.encode(userRegisterDTO.getPassword()), // Storing the encoded password
+                passwordEncoder.encode(userRegisterDTO.getPassword()),
                 userRegisterDTO.getAddress());
 
-        if (this.userRepository.all().isEmpty()) {
-            this.roleService.insert(new Role("ADMIN"));
-            this.roleService.insert(new Role("USER"));
-            role = this.roleService.get("ADMIN");
-        } else {
-            role = this.roleService.get("USER");
-        }
+        if (userRepository.getAllUsers().isEmpty()) {
+            roleService.insert(new Role("ADMIN"));
+            roleService.insert(new Role("USER"));
+            role = roleService.getRoleByName("ADMIN");
+        } else
+            role = roleService.getRoleByName("USER");
 
+        cartRepository.persist();
+
+        Cart cart = cartRepository.getCart(cartRepository.getAllCarts().size());
+        user.setCart(cart);
+        cart.setUser(user);
         role.getUsers().add(user);
         user.setRole(role);
 
-        this.userRepository.add(user, role);
+        userRepository.addUser(user, role);
     }
 
     @Override
-    public boolean login(UserLoginDTO userLoginDTO,
-                         HttpServletResponse response) {
-
+    public boolean login(UserLoginDTO userLoginDTO, HttpServletResponse response) {
         User user = userRepository.getExistingUser(userLoginDTO.getUsername(), userLoginDTO.getPassword());
 
         final int COOKIE_EXPIRATION_30_MIN = 60 * 30;
@@ -80,18 +87,24 @@ public class UserServiceImp implements UserService {
     public User checkToken(String token) {
         if (token == null)
             return null;
+
         return userRepository.checkToken(token);
     }
 
     @Override
     public String addToken(User user) {
         SecureRandom random = new SecureRandom();
-        byte bytes[] = new byte[20];
+        byte[] bytes = new byte[20];
         random.nextBytes(bytes);
         String token = bytes.toString();
         user.setToken(token);
         userRepository.setToken(token, user);
+
         return token;
     }
 
+    @Override
+    public User getUser(String name) {
+        return userRepository.getExistingUserByUsername(name);
+    }
 }

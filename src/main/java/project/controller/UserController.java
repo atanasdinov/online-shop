@@ -5,10 +5,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import project.model.DTOS.UserLoginDTO;
 import project.model.DTOS.UserRegisterDTO;
-import project.service.UserService;
+import project.service.specification.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -44,10 +43,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UserLoginDTO user,
-                        HttpServletResponse response) {
+    public String login(@ModelAttribute UserLoginDTO user, HttpServletResponse response) {
 
-        if(!userService.login(user, response))
+        if (!userService.login(user, response))
             return "redirect:/user/login?error";
         else {
             return "redirect:/home";
@@ -59,12 +57,11 @@ public class UserController {
     public String logout(@CookieValue(value = "token", required = false) Cookie cookie,
                          HttpServletResponse response) {
 
-        if(cookie!=null) {
+        if (cookie != null) {
             cookie.setMaxAge(0);
             cookie.setPath("/");
             response.addCookie(cookie);
         }
         return "redirect:/home";
     }
-
 }

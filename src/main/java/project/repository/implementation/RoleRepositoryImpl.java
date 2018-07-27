@@ -1,14 +1,16 @@
-package project.repositories;
+package project.repository.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import project.model.entities.Role;
+import project.repository.specification.RoleRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
+
 
 @Repository
 public class RoleRepositoryImpl implements RoleRepository {
@@ -22,10 +24,10 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public Role findRole(String name) {
+    public Role findRole(String roleName) {
         TypedQuery<Role> typedQuery = em
-                .createQuery("SELECT r FROM Role r WHERE r.name=:name", Role.class)
-                .setParameter("name", name);
+                .createQuery("select r from Role r where r.name=:roleName", Role.class)
+                .setParameter("roleName", roleName);
 
         return typedQuery.getSingleResult();
     }
@@ -37,9 +39,9 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public List<Role> getAll() {
+    public List<Role> getAllRoles() {
         TypedQuery<Role> typedQuery = em
-                .createQuery("SELECT r FROM Role r" , Role.class);
+                .createQuery("select r from Role r", Role.class);
 
         return typedQuery.getResultList();
     }

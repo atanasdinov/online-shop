@@ -1,182 +1,77 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Browse</title>
     <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link th:href="@{/css/browse.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
 <body>
-    <header>
-        <div class="collapse bg-dark" id="navbarHeader">
-            <div class="container" align="center">
-                    <div class="col-sm-4 offset-md-1 py-4" id="categories">
-                        <h4 class="text-white">Categories</h4>
-                        <ul class="list-unstyled">
-                            <li><a href="#" class="text-white">Category</a></li>
-                            <li><a href="#" class="text-white">Category</a></li>
-                            <li><a href="#" class="text-white">Category</a></li>
-                            <li><a href="#" class="text-white">Category</a></li>
-                        </ul>
-                        <ul class="list-unstyled">
-                            <li><a href="#" class="text-white">Category</a></li>
-                            <li><a href="#" class="text-white">Category</a></li>
-                            <li><a href="#" class="text-white">Category</a></li>
-                            <li><a href="#" class="text-white">Category</a></li>
-                        </ul>
-                        <ul class="list-unstyled">
-                            <li><a href="#" class="text-white">Category</a></li>
-                            <li><a href="#" class="text-white">Category</a></li>
-                            <li><a href="#" class="text-white">Category</a></li>
-                            <li><a href="#" class="text-white">Category</a></li>
-                        </ul>
-                    </div>
+<header>
+
+    <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="container d-flex justify-content-between">
+            <a style="width: 70%;" href="#" class="navbar-brand d-flex align-items-center">
+                <strong>Browse products</strong>
+            </a>
+            <div style="width: 30%;text-align: right;">
+                <div sec:authorize="isAnonymous()" style="float: right; margin-left: 5px;" >
+                    <a class="navbar-toggler" th:href="@{/user/register}">Sign up</a>
+                    <a class="navbar-toggler" th:href="@{/user/login}">Sign in</a>
+                </div>
+                <div sec:authorize="hasRole('USER')" style="float: right; margin-left: 5px;">
+                    <a class="navbar-toggler" th:href="@{/cart}">Cart</a>
+                </div>
+                <div sec:authorize="hasRole('ADMIN')" style="float: right; margin-left: 5px;">
+                    <a class="navbar-toggler" th:href="@{/products/create}">Create Product</a>
+                </div>
+
+                <div  sec:authorize="permitAll">
+                    <a class="navbar-toggler" th:href="@{/home}">Homepage
+                    </a>
+                </div>
+
+            <div sec:authorize="isAuthenticated()" style="float: right; margin-left: 5px;">
+                <a class="navbar-toggler" th:href="@{/user/logout}">Logout</a>
             </div>
+
         </div>
-        <div class="navbar navbar-dark bg-dark box-shadow">
-            <div class="container d-flex justify-content-between">
-                <a href="#" class="navbar-brand d-flex align-items-center">
-                    <strong>Browse products</strong>
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-        </div>
-    </header>
+    </div>
+    </div>
+
+</header>
 
 <main role="main">
 
     <div class="album py-5 bg-light">
         <div class="container">
-
             <div class="row">
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Details</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Details</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Details</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Details</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Details</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Details</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Details</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Details</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Details</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Add to cart</button>
-                                </div>
+                <div class="card mb-4 box-shadow" th:each="product : ${productList}" th:object="${product}">
+                    <img class="card-img-top"
+                         data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail"
+                         alt="Card image cap">
+                    <div class="card-body">
+                        <ul>
+                            <li><p th:text="|Category: *{categoryName} |"></li>
+                            <li><p th:text="|Name: *{name} |"></li>
+                            <li><p th:text="|Price: *{price} |"></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <form th:action="@{/cart/addItem/{productId}(productId=*{id})}"
+                                      sec:authorize="hasRole('USER')" method="post">
+                                    <button type="submit" class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart
+                                    </button>
+                                </form>
+                                <form th:action="@{/products/remove/{productId}(productId=*{id})}" method="post">
+                                    <input type="submit" class="btn btn-default btn-sm" sec:authorize="hasRole('ADMIN')"
+                                           value="Delete Product">
+                                    </input>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -190,13 +85,15 @@
 <footer class="text-muted">
     <div class="container">
         <p class="float-right">
-            <a th:href="@{/home}">Back to Home</a>
+            <a href="#">Back to top</a>
         </p>
         <p>ScaleShop</p>
     </div>
 </footer>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
 <script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/popper.min.js"></script>
 <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>

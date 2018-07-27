@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import project.service.RoleService;
-import project.service.UserService;
+import project.service.specification.RoleService;
+import project.service.specification.UserService;
 
 
 @Configuration

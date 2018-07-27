@@ -1,11 +1,13 @@
-package project.service;
+package project.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.model.entities.Role;
-import project.repositories.RoleRepository;
+import project.repository.specification.RoleRepository;
+import project.service.specification.RoleService;
 
 import java.util.List;
+
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -17,20 +19,21 @@ public class RoleServiceImpl implements RoleService {
         this.roleRepository = roleRepository;
     }
 
-
     @Override
     public List<Role> getAll() {
-        return roleRepository.getAll();
+        return roleRepository.getAllRoles();
     }
 
     @Override
-    public Role get(String name) {
-        return this.roleRepository.findRole(name);
+    public Role getRoleByName(String name) {
+        return roleRepository.findRole(name);
     }
 
     @Override
     public void insert(Role role) {
-        if (role == null) return;
-        this.roleRepository.persist(role);
+        if (role == null)
+            return;
+
+        roleRepository.persist(role);
     }
 }

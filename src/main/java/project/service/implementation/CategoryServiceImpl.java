@@ -1,14 +1,16 @@
-package project.service;
+package project.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.model.DTOS.CategoryDTO;
 import project.model.entities.Category;
-import project.repositories.CategoryRepository;
-import project.utils.ModelParser;
+import project.repository.specification.CategoryRepository;
+import project.service.specification.CategoryService;
+import project.utility.ModelParser;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -29,19 +31,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO get(String name) {
-        Category category = categoryRepository.get(name);
+    public CategoryDTO getCategoryByName(String name) {
+        Category category = categoryRepository.getCategory(name);
         return modelParser.convert(category, CategoryDTO.class);
     }
 
     @Override
-    public List<CategoryDTO> all() {
+    public List<CategoryDTO> getAllCategories() {
         List<CategoryDTO> categoryDTOS = new ArrayList<>();
-        List<Category> all = categoryRepository.all();
-        for (Category category : all) {
+        List<Category> all = categoryRepository.getAllCategories();
+        for (Category category : all)
             categoryDTOS.add(modelParser.convert(category, CategoryDTO.class));
-        }
+
         return categoryDTOS;
     }
-
 }

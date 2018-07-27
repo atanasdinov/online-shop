@@ -1,6 +1,7 @@
 package project.model.DTOS;
 
 public class CategoryDTO {
+
     private int id;
     private String name;
 

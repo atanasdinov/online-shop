@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -14,15 +15,15 @@ public class Role {
 
     private String name;
 
-    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<User> users;
 
-    public Role(String name) {
-        this.name = name;
+    public Role() {
         this.users = new HashSet<>();
     }
 
-    public Role() {
+    public Role(String name) {
+        this.name = name;
         this.users = new HashSet<>();
     }
 
