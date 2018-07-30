@@ -13,6 +13,7 @@ import java.util.List;
 
 
 @Repository
+@Transactional
 public class CartRepositoryImpl implements CartRepository {
 
     @PersistenceContext
@@ -24,7 +25,6 @@ public class CartRepositoryImpl implements CartRepository {
     }
 
     @Override
-    @Transactional
     public void persist() {
         Cart cart = new Cart();
         cart.setShipmentPrice(0.0);
@@ -33,7 +33,6 @@ public class CartRepositoryImpl implements CartRepository {
     }
 
     @Override
-    @Transactional
     public void addProductToCart(long cartId, Product product) {
         em.createNativeQuery("update carts c set c.totalPrice=c.totalPrice+:productPrice where c.id=:cartId", Cart.class)
                 .setParameter("productPrice", product.getPrice())
@@ -47,7 +46,6 @@ public class CartRepositoryImpl implements CartRepository {
     }
 
     @Override
-    @Transactional
     public void removeProductFromCart(long cartId, Product product) {
         em.createNativeQuery("update carts c set c.totalPrice=c.totalPrice-:productPrice where c.id=:cartId", Cart.class)
                 .setParameter("productPrice", product.getPrice())
@@ -61,7 +59,6 @@ public class CartRepositoryImpl implements CartRepository {
     }
 
     @Override
-    @Transactional
     public void removeAllProductsFromCart(long cartId) {
         em.createNativeQuery("delete from products_carts where cart_id=:cartId", Cart.class)
                 .setParameter("cartId", cartId)
@@ -74,7 +71,6 @@ public class CartRepositoryImpl implements CartRepository {
     }
 
     @Override
-    @Transactional
     public List<Product> getAllProductsFromCart(long cartId) {
         return (List<Product>) em.createNativeQuery("select * from products p left join products_carts pc on p.id=pc.products_id where pc.cart_id=:cartId", Product.class)
                 .setParameter("cartId", cartId)
@@ -82,7 +78,6 @@ public class CartRepositoryImpl implements CartRepository {
     }
 
     @Override
-    @Transactional
     public boolean doesExist(long cartId) {
         return !(em.createNativeQuery("select * from carts c where c.id=:cartId", Cart.class)
                 .setParameter("cartId", cartId)

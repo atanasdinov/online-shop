@@ -31,7 +31,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("user", new UserRegisterDTO());
@@ -39,6 +39,7 @@ public class UserController {
         return "register";
     }
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("user") UserRegisterDTO userRegisterDTO,
                            BindingResult bindingResult,
@@ -58,6 +59,7 @@ public class UserController {
         return "redirect:/user/login";
     }
 
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("user", new UserLoginDTO());
@@ -66,6 +68,7 @@ public class UserController {
         return "login";
     }
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/login")
     public String login(@ModelAttribute UserLoginDTO userLoginDTO,
                         HttpServletResponse response,
@@ -88,7 +91,6 @@ public class UserController {
         }
 
     }
-
 
     @GetMapping("/logout")
     @PreAuthorize(value = "isAuthenticated()")

@@ -16,4 +16,6 @@ public interface ProductRepository {
     List<Product> getAllProducts();
 
     List<Product> getAllProductsByCategory(String categoryName);
+
+    void decreaseQuantity(long id, int quantity);
 }

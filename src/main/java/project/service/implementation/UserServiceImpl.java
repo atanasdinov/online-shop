@@ -20,7 +20,7 @@ import java.security.SecureRandom;
 
 
 @Service
-public class UserServiceImp implements UserService {
+public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private ModelParser modelParser;
@@ -29,7 +29,7 @@ public class UserServiceImp implements UserService {
     private CartRepository cartRepository;
 
     @Autowired
-    public UserServiceImp(UserRepository userRepository, ModelParser modelParser, RoleService roleService, BCryptPasswordEncoder passwordEncoder, CartRepository cartRepository) {
+    public UserServiceImpl(UserRepository userRepository, ModelParser modelParser, RoleService roleService, BCryptPasswordEncoder passwordEncoder, CartRepository cartRepository) {
         this.userRepository = userRepository;
         this.modelParser = modelParser;
         this.roleService = roleService;

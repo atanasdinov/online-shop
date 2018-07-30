@@ -12,6 +12,7 @@ import java.util.List;
 
 
 @Repository
+@Transactional
 public class CategoryRepositoryImpl implements CategoryRepository {
 
     @PersistenceContext
@@ -23,7 +24,6 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
-    @Transactional
     public void persist(Category category) {
         em.createNativeQuery("insert into categories (name) values (:name)")
                 .setParameter("name", category.getName())
@@ -31,7 +31,6 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
-    @Transactional
     public Category getCategory(String name) {
         Category result = (Category) em
                 .createNativeQuery("select * from categories where name=:name", Category.class)
@@ -41,7 +40,6 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
-    @Transactional
     public List<Category> getAllCategories() {
         return (List<Category>) em
                 .createNativeQuery("select * from categories", Category.class)
