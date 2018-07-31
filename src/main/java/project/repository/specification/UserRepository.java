@@ -19,4 +19,6 @@ public interface UserRepository {
     User checkToken(String token);
 
     void setToken(String token, User user);
+
+    boolean doesExist(String username);
 }

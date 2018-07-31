@@ -15,6 +15,7 @@ import java.util.List;
 
 
 @Repository
+@Transactional
 public class UserRepositoryImpl implements UserRepository {
 
     @PersistenceContext
@@ -25,7 +26,6 @@ public class UserRepositoryImpl implements UserRepository {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    @Transactional
     public void addUser(User user, Role role) {
         em
                 .createNativeQuery("insert into users (address, email, firstName, lastName, password, username, role_id) " +
@@ -76,7 +76,6 @@ public class UserRepositoryImpl implements UserRepository {
                 .getSingleResult();
     }
 
-    @Transactional
     @Override
     public void setToken(String token, User user) {
         em
@@ -84,5 +83,13 @@ public class UserRepositoryImpl implements UserRepository {
                 .setParameter("token", token)
                 .setParameter("username", user.getUsername())
                 .executeUpdate();
+    }
+
+    @Override
+    public boolean doesExist(String username) {
+        return !(em.createNativeQuery("select * from users where username=:username")
+                .setParameter("username", username)
+                .getResultList()
+                .isEmpty());
     }
 }

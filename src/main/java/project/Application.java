@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 
+
 @SpringBootApplication
 //public class Application { // TODO: add "extends SpringBootServletInitializer" in order to build working WAR pkg.
 public class Application extends SpringBootServletInitializer {

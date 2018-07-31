@@ -47,12 +47,12 @@ public class ProductController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/removeProductById/{id}")
+    @PostMapping("/remove/{id}")
     public String removeProduct(@PathVariable("id") long id) {
         try {
             productService.removeProductById(id);
         } catch (NullPointerException e) {
-            return "redirect:/error";
+            return "error";
         }
         return "redirect:/products/browse";
     }

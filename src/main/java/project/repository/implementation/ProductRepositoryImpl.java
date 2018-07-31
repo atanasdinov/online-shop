@@ -12,6 +12,7 @@ import java.util.List;
 
 
 @Repository
+@Transactional
 public class ProductRepositoryImpl implements ProductRepository {
 
     @PersistenceContext
@@ -23,7 +24,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    @Transactional
     public void persist(Product product) {
         em.createNativeQuery("insert into products (name,price,quantity,rating,category_id) values (:name,:price,:quantity,:rating,:categoryId)")
                 .setParameter("name", product.getName())
@@ -34,7 +34,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    @Transactional
     public void delete(long id) {
         em.createNativeQuery("delete from products where id=:id", Product.class)
                 .setParameter("id", id)
@@ -42,7 +41,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    @Transactional
     public Product get(long id) {
         return (Product) em
                 .createNativeQuery("select * from products where id=:id", Product.class)
@@ -51,16 +49,24 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    @Transactional
     public List<Product> getAllProducts() {
         return (List<Product>) em.createNativeQuery("select * from products", Product.class).getResultList();
     }
 
     @Override
-    @Transactional
     public List<Product> getAllProductsByCategory(String categoryName) {
         return (List<Product>) em
                 .createNativeQuery("select * from products as p left join categories as c on p.category_id=c.id where c.name=:name", Product.class)
                 .setParameter("name", categoryName).getResultList();
     }
+
+    @Override
+    public void decreaseQuantity(long id, int quantity) {
+        em.createNativeQuery("update products set quantity=quantity-:quantity where id=:id", Product.class)
+                .setParameter("id", id)
+                .setParameter("quantity", quantity)
+                .executeUpdate();
+    }
+
+
 }

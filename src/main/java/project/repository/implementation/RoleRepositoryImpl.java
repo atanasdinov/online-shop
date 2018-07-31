@@ -13,6 +13,7 @@ import java.util.List;
 
 
 @Repository
+@Transactional
 public class RoleRepositoryImpl implements RoleRepository {
 
     @PersistenceContext
@@ -33,7 +34,6 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    @Transactional
     public void persist(Role role) {
         em.persist(role);
     }

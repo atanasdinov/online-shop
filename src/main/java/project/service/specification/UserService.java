@@ -18,4 +18,6 @@ public interface UserService {
     String addToken(User user);
 
     User getUser(String name);
+
+    boolean doesExist(String username);
 }

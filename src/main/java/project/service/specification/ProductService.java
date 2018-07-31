@@ -16,4 +16,5 @@ public interface ProductService {
     List<ProductDTO> getAllProducts();
 
     List<ProductDTO> getAllProductsFromCategory(String categoryName);
+
 }

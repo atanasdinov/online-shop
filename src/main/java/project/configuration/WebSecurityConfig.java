@@ -33,7 +33,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
-                .addFilterBefore(new AuthenticationFilter(roleService, userService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new AuthenticationFilter(roleService, userService), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                    .accessDeniedPage("/exceptions/unauthorized");
     }
 
     @Bean
