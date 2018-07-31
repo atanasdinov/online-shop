@@ -24,9 +24,12 @@ public class ProductController {
 
     @GetMapping("/browse")
     public String browse(Model model) {
-        List<ProductDTO> allProducts = productService.getAllProducts();
-        model.addAttribute("productList", allProducts);
-
+        try {
+            List<ProductDTO> allProducts = productService.getAllProducts();
+            model.addAttribute("productList", allProducts);
+        } catch (NullPointerException e) {
+            return "error";
+        }
         return "browse";
     }
 

@@ -65,6 +65,7 @@ public class UserController {
         model.addAttribute("user", new UserLoginDTO());
         model.addAttribute("userNotFound", null);
         model.addAttribute("incorrectPassword", null);
+
         return "login";
     }
 

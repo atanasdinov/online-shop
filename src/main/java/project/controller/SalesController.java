@@ -38,8 +38,12 @@ public class SalesController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/purchase")
     public String purchaseItems(Model model){
-        List<Sale> allSales = saleService.getAllSales();
-        model.addAttribute("sales", allSales);
+        try {
+            List<Sale> allSales = saleService.getAllSales();
+            model.addAttribute("sales", allSales);
+        } catch (NullPointerException e) {
+            return "error";
+        }
         return "purchase";
     }
 
