@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import project.exception.InvalidCartException;
 import project.exception.InvalidProductException;
 import project.model.DTOS.ProductDTO;
@@ -51,7 +54,7 @@ public class CartController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/addItem/{productId}")
-    public String addToCart(@PathVariable("productId") long productId, Principal principal) {
+    public String addToCart(@PathVariable("productId") long productId, Principal principal, Model model) {
         try {
             User loggedIn = userService.getUser(principal.getName());
             cartService.addProduct(loggedIn.getCart().getId(), productId);

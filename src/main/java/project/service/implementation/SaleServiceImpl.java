@@ -23,23 +23,36 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public void add(String username, List<String> productNames, List<String> prices, List<String> productsId, List<String> productsQuantity) {
+        boolean flag = true;
+
         for (int i = 0; i < productNames.size(); i++) {
             String productName = productNames.get(i);
             Double price = Double.parseDouble(prices.get(i));
             Long productId = Long.parseLong(productsId.get(i));
             try {
                 Integer productQuantity = Integer.parseInt(productsQuantity.get(i));
-                if(productQuantity >= 0 && productQuantity <= productRepository.get(productId).getQuantity()) {
-                    productRepository.decreaseQuantity(productId, productQuantity);
-                    saleRepository.persist(username, productName, price*productQuantity, productQuantity);
+                if (productQuantity <= 0 || productQuantity > productRepository.get(productId).getQuantity()) {
+                    flag = false;
+                    throw new IllegalArgumentException("Quantity must be valid");
                 }
-                else{
-                    throw new IllegalArgumentException("Invalid quantity");
-                }
-            } catch (ClassCastException e) {
-                throw new ClassCastException("Quantity must be positive number");
             } catch (IllegalArgumentException iae) {
-                throw new IllegalArgumentException("quantity must be positive");
+                flag = false;
+                throw new IllegalArgumentException("Quantity must be valid");
+            }
+        }
+
+
+        if (flag) {
+            for (int i = 0; i < productNames.size(); i++) {
+                String productName = productNames.get(i);
+                Double price = Double.parseDouble(prices.get(i));
+                Long productId = Long.parseLong(productsId.get(i));
+                Integer productQuantity = Integer.parseInt(productsQuantity.get(i));
+
+                productRepository.decreaseQuantity(productId, productQuantity);
+                if(productRepository.getProductQuantity(productId) == 0)
+                    productRepository.delete(productId);
+                saleRepository.persist(username, productName, price * productQuantity, productQuantity);
             }
 
         }

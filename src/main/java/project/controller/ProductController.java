@@ -35,7 +35,8 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/create")
-    public String createProductForm(@ModelAttribute ProductDTO productDTO, Model model) {
+    public String createProductForm(@ModelAttribute ProductDTO productDTO,
+                                                    Model model) {
         model.addAttribute("product", productDTO);
 
         return "create-product";
@@ -43,7 +44,8 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
-    public String createProduct(@ModelAttribute ProductDTO productDTO, Model model) {
+    public String createProduct(@ModelAttribute ProductDTO productDTO,
+                                                Model model) {
         productService.add(productDTO);
 
         return "redirect:/products/browse";

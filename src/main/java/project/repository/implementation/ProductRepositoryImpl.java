@@ -68,5 +68,13 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .executeUpdate();
     }
 
+    @Override
+    public int getProductQuantity(long id) {
+        return (int) em
+                .createNativeQuery("select quantity from products where id=:id")
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
 
 }

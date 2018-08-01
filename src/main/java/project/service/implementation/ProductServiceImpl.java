@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProductById(long productId) {
         if (productId < 1)
-            throw new NullPointerException("Product name must not be null");
+            throw new NullPointerException("Product name must not be null!");
 
         Product product = productRepository.get(productId);
         return modelMapper.map(product, ProductDTO.class);
@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> getAllProductsFromCategory(String categoryName) {
         if (categoryName == null)
-            throw new NullPointerException("category name must not be null");
+            throw new NullPointerException("category name must not be null!");
 
         List<Product> products = productRepository.getAllProductsByCategory(categoryName);
         List<ProductDTO> productDTOS = new ArrayList<>();
