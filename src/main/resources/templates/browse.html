@@ -61,12 +61,19 @@
                         </ul>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <form th:action="@{/cart/addItem/{productId}(productId=*{id})}"
-                                      sec:authorize="hasRole('USER')" method="post">
-                                    <button type="submit" class="btn btn-default btn-sm">
-                                        <span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart
-                                    </button>
-                                </form>
+                                <th:block th:if="*{quantity != 0}">
+                                    <form th:action="@{/cart/addItem/{productId}(productId=*{id})}"
+                                          sec:authorize="hasRole('USER')" method="post">
+                                        <button type="submit" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart
+                                        </button>
+                                    </form>
+                                </th:block>
+                                <th:block th:if="*{quantity == 0}">
+                                        <p sec:authorize="hasRole('USER')" style="color: #d9534f">
+                                            Product not currently available!
+                                        </p>
+                                </th:block>
                                 <form th:action="@{/products/remove/{productId}(productId=*{id})}" method="post">
                                     <input type="submit" class="btn btn-default btn-sm" sec:authorize="hasRole('ADMIN')"
                                            value="Delete Product">

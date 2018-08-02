@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.exception.InvalidCartException;
+import project.exception.QuantityNotAvailableException;
 import project.model.entities.Sale;
 import project.service.specification.CartService;
 import project.service.specification.ProductService;
@@ -60,11 +61,15 @@ public class SalesController {
         try {
             saleService.add(principal.getName(), productName, price, productId, productQuantity);
         } catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("invalidQuantity", "You must enter a valid quantity!");
 
-            redirectAttributes.addFlashAttribute("invalidQuantity", "You must enter a valid quantity");
+            return "redirect:/cart";
+        } catch (QuantityNotAvailableException qe) {
+            redirectAttributes.addFlashAttribute("invalidQuantity", "Selected quantity is not available!");
 
             return "redirect:/cart";
         }
+
         cartService.removeAll(userService.getUser(principal.getName()).getCart().getId());
 
         return "redirect:/home";

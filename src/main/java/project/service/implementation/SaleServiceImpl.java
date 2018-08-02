@@ -2,6 +2,7 @@ package project.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.exception.QuantityNotAvailableException;
 import project.model.entities.Sale;
 import project.repository.specification.ProductRepository;
 import project.repository.specification.SaleRepository;
@@ -31,14 +32,18 @@ public class SaleServiceImpl implements SaleService {
             Long productId = Long.parseLong(productsId.get(i));
             try {
                 Integer productQuantity = Integer.parseInt(productsQuantity.get(i));
-                if (productQuantity <= 0 || productQuantity > productRepository.get(productId).getQuantity()) {
+                if (productQuantity <= 0) {
                     flag = false;
-                    throw new IllegalArgumentException("Quantity must be valid");
+                    throw new IllegalArgumentException("Quantity must be valid!");
+                }
+                if (productQuantity > productRepository.get(productId).getQuantity()) {
+                    flag = false;
+                    throw new QuantityNotAvailableException("Quantity not available!");
                 }
             } catch (IllegalArgumentException iae) {
-                flag = false;
-                throw new IllegalArgumentException("Quantity must be valid");
+                throw new IllegalArgumentException("Quantity must be valid!");
             }
+
         }
 
 
@@ -50,8 +55,6 @@ public class SaleServiceImpl implements SaleService {
                 Integer productQuantity = Integer.parseInt(productsQuantity.get(i));
 
                 productRepository.decreaseQuantity(productId, productQuantity);
-                if(productRepository.getProductQuantity(productId) == 0)
-                    productRepository.delete(productId);
                 saleRepository.persist(username, productName, price * productQuantity, productQuantity);
             }
 

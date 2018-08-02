@@ -1,5 +1,6 @@
 package project.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -24,11 +25,13 @@ public class HomeController {
         return "home";
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/contact")
     public String contact() {
         return "contact";
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/thanks")
     public String thanks() {
         return "thanks";

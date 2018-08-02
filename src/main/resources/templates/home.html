@@ -18,12 +18,14 @@
             <nav class="nav nav-masthead justify-content-center">
                 <a class="nav-link active" th:href="@{/home}">Home</a>
                 <a class="nav-link" th:href="@{/products/browse}">Browse</a>
-                <a class="nav-link" th:href="@{/contact}">Contact</a>
+                <th:block sec:authorize="hasRole('USER')">
+                    <a class="nav-link" th:href="@{/contact}">Contact</a>
+                </th:block>
                 <a class="nav-link" ></a>
                 <a class="nav-link" ></a>
                 <th:block sec:authorize="isAnonymous()">
-                <a class="nav-link" th:href="@{/user/register}">Sign up</a>
-                <a class="nav-link" th:href="@{/user/login}">Sign in</a>
+                    <a class="nav-link" th:href="@{/user/register}">Sign up</a>
+                    <a class="nav-link" th:href="@{/user/login}">Sign in</a>
                 </th:block>
                 <th:block sec:authorize="hasRole('USER')">
                     <p class="nav-link" th:text="${username}"></p>
