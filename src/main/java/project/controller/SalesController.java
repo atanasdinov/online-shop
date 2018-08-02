@@ -56,11 +56,13 @@ public class SalesController {
                            @RequestParam("productId") List<String> productId,
                            @RequestParam("productQuantity") List<String> productQuantity,
                            RedirectAttributes redirectAttributes,
-                           Principal principal) throws InvalidCartException {
-
+                           Principal principal) {
         try {
             saleService.add(principal.getName(), productName, price, productId, productQuantity);
-        } catch (IllegalArgumentException e){
+        } catch (InvalidCartException e) {
+            return "redirect:/cart";
+        }
+        catch (IllegalArgumentException e){
             redirectAttributes.addFlashAttribute("invalidQuantity", "You must enter a valid quantity!");
 
             return "redirect:/cart";
@@ -72,6 +74,6 @@ public class SalesController {
 
         cartService.removeAll(userService.getUser(principal.getName()).getCart().getId());
 
-        return "redirect:/home";
+        return "redirect:/success";
     }
 }

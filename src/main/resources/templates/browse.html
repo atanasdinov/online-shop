@@ -18,23 +18,23 @@
                 <strong>Browse products</strong>
             </a>
             <div style="width: 30%;text-align: right;">
-                <div sec:authorize="isAnonymous()" style="float: right; margin-left: 5px;" >
+                <div sec:authorize="isAnonymous()" style="float: right" >
                     <a class="navbar-toggler" th:href="@{/user/register}">Sign up</a>
                     <a class="navbar-toggler" th:href="@{/user/login}">Sign in</a>
                 </div>
-                <div sec:authorize="hasRole('USER')" style="float: right; margin-left: 5px;">
+                <div sec:authorize="hasRole('USER')" style="float: right">
                     <a class="navbar-toggler" th:href="@{/cart}">Cart</a>
                 </div>
-                <div sec:authorize="hasRole('ADMIN')" style="float: right; margin-left: 5px;">
+                <div sec:authorize="hasRole('ADMIN')" style="float: right">
                     <a class="navbar-toggler" th:href="@{/products/create}">Create Product</a>
                 </div>
 
-                <div  sec:authorize="permitAll">
+                <div  sec:authorize="permitAll" style="float: right">
                     <a class="navbar-toggler" th:href="@{/home}">Homepage
                     </a>
                 </div>
 
-                <div sec:authorize="isAuthenticated()" style="float: right; margin-left: 5px;">
+                <div sec:authorize="isAuthenticated()" style="float: right">
                     <a class="navbar-toggler" th:href="@{/user/logout}">Logout</a>
                 </div>
 
@@ -58,6 +58,7 @@
                             <li><p th:text="|Category: *{categoryName} |"></li>
                             <li><p th:text="|Name: *{name} |"></li>
                             <li><p th:text="|Price: *{price} |"></li>
+                            <li sec:authorize="hasRole('ADMIN')"><p th:text="|Quantity: *{quantity} |"></li>
                         </ul>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
@@ -74,6 +75,11 @@
                                             Product not currently available!
                                         </p>
                                 </th:block>
+                                <form th:action="@{/products/edit/{productId}(productId=*{id})}" method="get">
+                                    <input type="submit" class="btn btn-default btn-sm" sec:authorize="hasRole('ADMIN')"
+                                           value="Edit Product">
+                                    </input>
+                                </form>
                                 <form th:action="@{/products/remove/{productId}(productId=*{id})}" method="post">
                                     <input type="submit" class="btn btn-default btn-sm" sec:authorize="hasRole('ADMIN')"
                                            value="Delete Product">

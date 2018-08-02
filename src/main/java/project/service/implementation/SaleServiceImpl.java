@@ -2,6 +2,7 @@ package project.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.exception.InvalidCartException;
 import project.exception.QuantityNotAvailableException;
 import project.model.entities.Sale;
 import project.repository.specification.ProductRepository;
@@ -25,6 +26,9 @@ public class SaleServiceImpl implements SaleService {
     @Override
     public void add(String username, List<String> productNames, List<String> prices, List<String> productsId, List<String> productsQuantity) {
         boolean flag = true;
+
+        if(productNames.isEmpty())
+            throw new InvalidCartException("Empty cart!");
 
         for (int i = 0; i < productNames.size(); i++) {
             String productName = productNames.get(i);

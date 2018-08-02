@@ -6,6 +6,7 @@ import project.model.entities.Category;
 import project.repository.specification.CategoryRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -31,7 +32,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
-    public Category getCategory(String name) {
+    public Category getCategory(String name) throws NoResultException {
         Category result = (Category) em
                 .createNativeQuery("select * from categories where name=:name", Category.class)
                 .setParameter("name", name).getSingleResult();

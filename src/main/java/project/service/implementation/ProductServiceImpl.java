@@ -3,6 +3,7 @@ package project.service.implementation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.exception.ProductAlreadyExistsException;
 import project.model.DTOS.ProductDTO;
 import project.model.entities.Category;
 import project.model.entities.Product;
@@ -33,6 +34,9 @@ public class ProductServiceImpl implements ProductService {
         if (productDTO.getCategoryName() == null)
             throw new NullPointerException("Category name must not be null!");
 
+        if(productRepository.doesExist(productDTO.getName()))
+            throw new ProductAlreadyExistsException("Product already exists!");
+
         if (!categoryRepository.doesExist(productDTO.getCategoryName()))
             categoryRepository.persist(new Category(productDTO.getCategoryName()));
 
@@ -40,6 +44,11 @@ public class ProductServiceImpl implements ProductService {
         Product product = new Product(category, productDTO.getPrice(), productDTO.getName(), productDTO.getQuantity());
 
         productRepository.persist(product);
+    }
+
+    @Override
+    public void editProduct(long id, ProductDTO productDTO, long categoryId) {
+        productRepository.edit(id, productDTO, categoryId);
     }
 
     @Override

@@ -7,13 +7,17 @@
     <link th:href = "@{/css/signup.css}" rel="stylesheet" type="text/css"/>
 </head>
 <body class="text-center">
-<form class="form-signup" action="#" th:action="@{/products/create}" th:object="${product}" method="post">
+<form class="form-signup" th:action="@{/products/create}" th:object="${product}" method="post">
     <h1 class="h3 mb-3 font-weight-normal">Create product</h1>
 
     <label for="inputCategory" class="sr-only">Category</label>
     <input type="text" th:field="*{categoryName}" id="inputCategory" class="form-control" placeholder="Category" required  >
 
     <p></p>
+
+    <th:block th:if="${productExists!=null}">
+        <p style="color: #d9534f" th:text="${productExists}"></p>
+    </th:block>
 
     <label for="inputName" class="sr-only">Name</label>
     <input type="text" id="inputName" class="form-control" placeholder="Name" th:field="*{name}" required>

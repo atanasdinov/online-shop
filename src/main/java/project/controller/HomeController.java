@@ -36,6 +36,10 @@ public class HomeController {
     public String thanks() {
         return "thanks";
     }
-}
 
-// TODO: Redirect to success page after purchase!
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/success")
+    public String success() {
+        return "purchase-success";
+    }
+}

@@ -67,10 +67,11 @@
                                         <input type="submit" class="btn btn-default btn-sm"  sec:authorize="hasRole('USER')" value="Empty cart">
                                         </input>
                                     </form>
-
                                 </div>
                             </div>
                         </div>
+
+
                     <hr>
                     <div class="panel-footer">
                         <div class="row text-center">
@@ -84,12 +85,22 @@
                                 </th:block>
 
                                 <form method="post" th:action="@{/sales/purchase}">
-                                    <div th:each="product : ${products}" th:object="${product}" >
-                                        <input type="hidden" name="productName" th:value="*{name}">
-                                        <input type="hidden" name="price" th:value="*{price}">
-                                        <input type="hidden" name="productId" th:value="*{id}">
-                                        <input type="text" name="productQuantity" value="1"/>
-                                    </div>
+                                    <th:block th:if="${!products.isEmpty()}">
+                                        <div th:each="product : ${products}" th:object="${product}" >
+                                            <input type="hidden" name="productName" th:value="*{name}">
+                                            <input type="hidden" name="price" th:value="*{price}">
+                                            <input type="hidden" name="productId" th:value="*{id}">
+                                            <input type="text" name="productQuantity" value="1"/>
+                                        </div>
+                                    </th:block>
+                                    <th:block th:if="${products.isEmpty()}">
+                                        <div th:object="${product}" >
+                                            <input type="hidden" name="productName" th:value="null">
+                                            <input type="hidden" name="price" th:value="null">
+                                            <input type="hidden" name="productId" th:value="null">
+                                            <input type="hidden" name="productQuantity" value="0"/>
+                                        </div>
+                                    </th:block>
                                     <div class="col-xs-3">
                                         <button type="submit" class="btn btn-success btn-block" >
                                             Checkout

@@ -2,10 +2,12 @@ package project.repository.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import project.model.DTOS.ProductDTO;
 import project.model.entities.Product;
 import project.repository.specification.ProductRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -34,6 +36,17 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public void edit(long id, ProductDTO productDTO, long categoryId) {
+        em.createNativeQuery("update products set name=:name, price=:price, quantity=:quantity, category_id=:categoryId where id=:id", Product.class)
+                .setParameter("id", id)
+                .setParameter("categoryId", categoryId)
+                .setParameter("name", productDTO.getName())
+                .setParameter("price", productDTO.getPrice())
+                .setParameter("quantity", productDTO.getQuantity())
+                .executeUpdate();
+    }
+
+    @Override
     public void delete(long id) {
         em.createNativeQuery("delete from products where id=:id", Product.class)
                 .setParameter("id", id)
@@ -46,6 +59,14 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .createNativeQuery("select * from products where id=:id", Product.class)
                 .setParameter("id", id)
                 .getSingleResult();
+    }
+
+    @Override
+    public Boolean doesExist(String name) {
+        return  !(em.createNativeQuery("select * from products where name=:name", Product.class)
+                    .setParameter("name", name)
+                    .getResultList()
+                    .isEmpty());
     }
 
     @Override

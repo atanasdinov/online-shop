@@ -1,6 +1,5 @@
 package project.service.specification;
 
-import org.springframework.stereotype.Service;
 import project.exception.InvalidCartException;
 import project.exception.InvalidProductException;
 import project.model.DTOS.ProductDTO;
