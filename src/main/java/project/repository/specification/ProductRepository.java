@@ -19,5 +19,4 @@ public interface ProductRepository {
 
     void decreaseQuantity(long id, int quantity);
 
-    int getProductQuantity(long id);
 }
