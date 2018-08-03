@@ -2,7 +2,7 @@ package project.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import project.exception.InvalidCartException;
+import project.exception.CheckoutEmptyCartException;
 import project.exception.QuantityNotAvailableException;
 import project.model.entities.Sale;
 import project.repository.specification.ProductRepository;
@@ -24,11 +24,12 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public void add(String username, List<String> productNames, List<String> prices, List<String> productsId, List<String> productsQuantity) {
+    public void add(String username, List<String> productNames, List<String> prices, List<String> productsId, List<String> productsQuantity)
+            throws IllegalArgumentException, QuantityNotAvailableException, CheckoutEmptyCartException {
         boolean flag = true;
 
         if(productNames.isEmpty())
-            throw new InvalidCartException("Empty cart!");
+            throw new CheckoutEmptyCartException("Empty cart!");
 
         for (int i = 0; i < productNames.size(); i++) {
             String productName = productNames.get(i);
@@ -47,9 +48,7 @@ public class SaleServiceImpl implements SaleService {
             } catch (IllegalArgumentException iae) {
                 throw new IllegalArgumentException("Quantity must be valid!");
             }
-
         }
-
 
         if (flag) {
             for (int i = 0; i < productNames.size(); i++) {
@@ -61,7 +60,6 @@ public class SaleServiceImpl implements SaleService {
                 productRepository.decreaseQuantity(productId, productQuantity);
                 saleRepository.persist(username, productName, price * productQuantity, productQuantity);
             }
-
         }
     }
 

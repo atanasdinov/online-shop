@@ -89,4 +89,11 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .executeUpdate();
     }
 
+    @Override
+    public List<Product> productsMatching(String search) {
+        return (List<Product>) em.createNativeQuery("select * from products where name like :search", Product.class)
+                .setParameter("search","%"+search+"%")
+                .getResultList();
+    }
+
 }

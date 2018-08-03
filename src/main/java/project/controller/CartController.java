@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import project.exception.InvalidCartException;
-import project.exception.InvalidProductException;
 import project.exception.ProductAlreadyInCartException;
 import project.model.DTOS.ProductDTO;
 import project.model.entities.User;
@@ -44,14 +42,12 @@ public class CartController {
     public String viewCart(Model model,
                            Principal principal) {
         User loggedIn = userService.getUser(principal.getName());
-        try {
-            List<ProductDTO> allProducts = cartService.getProducts(loggedIn.getCart().getId());
-            model.addAttribute("cartId", loggedIn.getCart().getId());
-            model.addAttribute("products", allProducts);
-            model.addAttribute("totalPrice", cartService.getTotalPrice(loggedIn.getCart().getId()));
-        } catch (InvalidCartException e) {
-            return "error";
-        }
+
+        List<ProductDTO> allProducts = cartService.getProducts(loggedIn.getCart().getId());
+        model.addAttribute("cartId", loggedIn.getCart().getId());
+        model.addAttribute("products", allProducts);
+        model.addAttribute("totalPrice", cartService.getTotalPrice(loggedIn.getCart().getId()));
+
         return "cart";
     }
 
@@ -61,11 +57,10 @@ public class CartController {
                             Principal principal,
                             Model model,
                             RedirectAttributes redirectAttributes) {
+        User loggedIn = userService.getUser(principal.getName());
         try {
-            User loggedIn = userService.getUser(principal.getName());
             cartService.addProduct(loggedIn.getCart().getId(), productId);
-        } catch (InvalidProductException | InvalidCartException e) {
-            return "redirect:/cart";
+
         } catch (ProductAlreadyInCartException e) {
             redirectAttributes.addFlashAttribute("productAlreadyInCart", "This product is already in your cart.");
             redirectAttributes.addFlashAttribute("productId", productId);
@@ -78,23 +73,17 @@ public class CartController {
     @PostMapping("/removeItem/{productId}")
     public String removeFromCart(@PathVariable("productId") Long productId,
                                  Principal principal) {
-        try {
-            User loggedIn = userService.getUser(principal.getName());
-            cartService.removeProduct(loggedIn.getCart().getId(), productId);
-        } catch (InvalidProductException | InvalidCartException e) {
-            return "redirect:/cart";
-        }
+        User loggedIn = userService.getUser(principal.getName());
+        cartService.removeProduct(loggedIn.getCart().getId(), productId);
+
         return "redirect:/cart";
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/emptyCart/{cartId}")
     public String emptyCart(@PathVariable("cartId") long cartId) {
-        try {
-            cartService.removeAll(cartId);
-        } catch (InvalidCartException e) {
-            return "error";
-        }
+        cartService.removeAll(cartId);
+
         return "redirect:/cart";
     }
 

@@ -31,12 +31,9 @@ public class ProductController {
 
     @GetMapping("/browse")
     public String browse(Model model) {
-        try {
-            List<ProductDTO> allProducts = productService.getAllProducts();
-            model.addAttribute("productList", allProducts);
-        } catch (NullPointerException e) {
-            return "error";
-        }
+        List<ProductDTO> allProducts = productService.getAllProducts();
+        model.addAttribute("productList", allProducts);
+
         return "browse";
     }
 
@@ -44,7 +41,6 @@ public class ProductController {
     @GetMapping("/create")
     public String createProductForm(@ModelAttribute ProductDTO productDTO,
                                     Model model) {
-
         model.addAttribute("product", productDTO);
 
         return "create-product";
@@ -55,7 +51,6 @@ public class ProductController {
     public String createProduct(@ModelAttribute ProductDTO productDTO,
                                 Model model,
                                 RedirectAttributes redirectAttributes) {
-
         try {
             productService.add(productDTO);
         } catch (ProductAlreadyExistsException e) {
@@ -69,11 +64,8 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/remove/{id}")
     public String removeProduct(@PathVariable("id") long id) {
-        try {
-            productService.removeProductById(id);
-        } catch (NullPointerException e) {
-            return "error";
-        }
+        productService.removeProductById(id);
+
         return "redirect:/products/browse";
     }
 
@@ -81,7 +73,6 @@ public class ProductController {
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable("id") long id,
                                   Model model) {
-
         ProductDTO product = productService.getProductById(id);
         model.addAttribute("product", product);
 
@@ -96,11 +87,19 @@ public class ProductController {
         try {
             CategoryDTO categoryDTO = categoryService.getCategoryByName(productDTO.getCategoryName());
             productService.editProduct(id, productDTO, categoryDTO.getId());
-        } catch (NullPointerException | NoResultException e) {
+        } catch (NoResultException e) {
             redirectAttributes.addFlashAttribute("invalidCategoryName", "Category name does not exist!");
 
             return "redirect:/products/edit/{id}";
         }
         return "redirect:/products/browse";
+    }
+
+    @PostMapping("/search")
+    public String search(@RequestParam("search") String search,
+                         Model model) {
+        List<ProductDTO> foundProducts = this.productService.foundProducts(search);
+        model.addAttribute("foundProducts", foundProducts);
+        return "search";
     }
 }

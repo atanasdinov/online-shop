@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import project.exception.InvalidCartException;
+import project.exception.CheckoutEmptyCartException;
 import project.exception.QuantityNotAvailableException;
 import project.model.entities.Sale;
 import project.service.specification.CartService;
@@ -39,13 +39,10 @@ public class SalesController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/purchase")
-    public String purchaseItems(Model model){
-        try {
-            List<Sale> allSales = saleService.getAllSales();
-            model.addAttribute("sales", allSales);
-        } catch (NullPointerException e) {
-            return "error";
-        }
+    public String purchaseItems(Model model) {
+        List<Sale> allSales = saleService.getAllSales();
+        model.addAttribute("sales", allSales);
+
         return "purchase";
     }
 
@@ -59,13 +56,13 @@ public class SalesController {
                            Principal principal) {
         try {
             saleService.add(principal.getName(), productName, price, productId, productQuantity);
-        } catch (InvalidCartException e) {
+        } catch (CheckoutEmptyCartException e) {
             return "redirect:/cart";
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("invalidQuantity", "You must enter a valid quantity!");
 
             return "redirect:/cart";
-        } catch (QuantityNotAvailableException qe) {
+        } catch (QuantityNotAvailableException e) {
             redirectAttributes.addFlashAttribute("invalidQuantity", "Selected quantity is not available!");
 
             return "redirect:/cart";

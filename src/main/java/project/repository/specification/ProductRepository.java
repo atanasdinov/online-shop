@@ -24,4 +24,6 @@ public interface ProductRepository {
 
     void decreaseQuantity(long id, int quantity);
 
+    List<Product> productsMatching(String search);
+
 }
