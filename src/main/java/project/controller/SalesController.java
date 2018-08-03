@@ -61,8 +61,7 @@ public class SalesController {
             saleService.add(principal.getName(), productName, price, productId, productQuantity);
         } catch (InvalidCartException e) {
             return "redirect:/cart";
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e){
             redirectAttributes.addFlashAttribute("invalidQuantity", "You must enter a valid quantity!");
 
             return "redirect:/cart";

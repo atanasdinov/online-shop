@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.exception.InvalidCartException;
 import project.exception.InvalidProductException;
+import project.exception.ProductAlreadyInCartException;
 import project.model.DTOS.ProductDTO;
 import project.model.entities.User;
 import project.service.specification.CartService;
@@ -39,7 +41,8 @@ public class CartController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping
-    public String viewCart(Model model, Principal principal) {
+    public String viewCart(Model model,
+                           Principal principal) {
         User loggedIn = userService.getUser(principal.getName());
         try {
             List<ProductDTO> allProducts = cartService.getProducts(loggedIn.getCart().getId());
@@ -54,19 +57,27 @@ public class CartController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/addItem/{productId}")
-    public String addToCart(@PathVariable("productId") long productId, Principal principal, Model model) {
+    public String addToCart(@PathVariable("productId") long productId,
+                            Principal principal,
+                            Model model,
+                            RedirectAttributes redirectAttributes) {
         try {
             User loggedIn = userService.getUser(principal.getName());
             cartService.addProduct(loggedIn.getCart().getId(), productId);
         } catch (InvalidProductException | InvalidCartException e) {
             return "redirect:/cart";
+        } catch (ProductAlreadyInCartException e) {
+            redirectAttributes.addFlashAttribute("productAlreadyInCart", "This product is already in your cart.");
+            redirectAttributes.addFlashAttribute("productId", productId);
+            return "redirect:/products/browse";
         }
         return "redirect:/cart";
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/removeItem/{productId}")
-    public String removeFromCart(@PathVariable("productId") Long productId, Principal principal) {
+    public String removeFromCart(@PathVariable("productId") Long productId,
+                                 Principal principal) {
         try {
             User loggedIn = userService.getUser(principal.getName());
             cartService.removeProduct(loggedIn.getCart().getId(), productId);

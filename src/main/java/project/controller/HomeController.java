@@ -15,7 +15,7 @@ import java.security.Principal;
 @RequestMapping("/")
 public class HomeController {
 
-    @GetMapping({"", "/home"})
+    @GetMapping({"", "home"})
     public String index(Model model,
                         @CookieValue(value = "token", required = false) Cookie cookie,
                         Principal principal) {
@@ -26,19 +26,19 @@ public class HomeController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/contact")
+    @GetMapping("contact")
     public String contact() {
         return "contact";
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/thanks")
+    @GetMapping("thanks")
     public String thanks() {
         return "thanks";
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/success")
+    @GetMapping("success")
     public String success() {
         return "purchase-success";
     }

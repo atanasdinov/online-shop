@@ -55,6 +55,11 @@
                          alt="Card image cap">
                     <div class="card-body">
                         <ul>
+                            <th:block th:if="${productAlreadyInCart!=null}">
+                                <th:block th:if="${productId}==*{id}">
+                                    <p style="color: #d9534f" th:text="${productAlreadyInCart}"></p>
+                                </th:block>
+                            </th:block>
                             <li><p th:text="|Category: *{categoryName} |"></li>
                             <li><p th:text="|Name: *{name} |"></li>
                             <li><p th:text="|Price: *{price} |"></li>

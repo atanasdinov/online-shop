@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.exception.InvalidCartException;
 import project.exception.InvalidProductException;
+import project.exception.ProductAlreadyInCartException;
 import project.model.DTOS.ProductDTO;
 import project.model.entities.Product;
 import project.repository.specification.CartRepository;
@@ -46,7 +47,7 @@ public class CartServiceImpl implements CartService {
         if (!cartRepository.doesProductExist(cartId, product))
             cartRepository.addProductToCart(cartId, product);
         else
-            throw new InvalidProductException("Product does not exist in the given cart!");
+            throw new ProductAlreadyInCartException("Product is already in cart!");
     }
 
     @Override
