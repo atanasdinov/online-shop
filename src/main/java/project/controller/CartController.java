@@ -8,18 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.*;
-import project.exception.InvalidCartException;
-import project.exception.InvalidProductException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import project.exception.ProductAlreadyInCartException;
 import project.model.DTOS.ProductDTO;
 import project.model.entities.User;
 import project.service.specification.CartService;
 import project.service.specification.ProductService;
 import project.service.specification.UserService;
-import project.service.specification.CartService;
-import project.service.specification.ProductService;
 import project.service.specification.SaleService;
-import project.service.specification.UserService;
+
 
 import java.security.Principal;
 import java.util.List;
@@ -43,59 +40,51 @@ public class CartController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping
-    public String viewCart(Model model, Principal principal) {
+    public String viewCart(Model model,
+                           Principal principal) {
         User loggedIn = userService.getUser(principal.getName());
-        try {
-            List<ProductDTO> allProducts = cartService.getProducts(loggedIn.getCart().getId());
-            model.addAttribute("cartId", loggedIn.getCart().getId());
-            model.addAttribute("products", allProducts);
-            model.addAttribute("totalPrice", cartService.getTotalPrice(loggedIn.getCart().getId()));
-        } catch (InvalidCartException e) {
-            return "redirect:/error";
-        }
-        try {
-            List<ProductDTO> allProducts = cartService.getProducts(loggedIn.getCart().getId());
-            model.addAttribute("cartId", loggedIn.getCart().getId());
-            model.addAttribute("products", allProducts);
-            model.addAttribute("totalPrice", cartService.getTotalPrice(loggedIn.getCart().getId()));
-        } catch (InvalidCartException e) {
-            return "error";
-        }
+
+        List<ProductDTO> allProducts = cartService.getProducts(loggedIn.getCart().getId());
+        model.addAttribute("cartId", loggedIn.getCart().getId());
+        model.addAttribute("products", allProducts);
+        model.addAttribute("totalPrice", cartService.getTotalPrice(loggedIn.getCart().getId()));
+
         return "cart";
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/addItem/{productId}")
-    public String addToCart(@PathVariable("productId") long productId, Principal principal) {
+    public String addToCart(@PathVariable("productId") long productId,
+                            Principal principal,
+                            Model model,
+                            RedirectAttributes redirectAttributes) {
+        User loggedIn = userService.getUser(principal.getName());
         try {
-            User loggedIn = userService.getUser(principal.getName());
             cartService.addProduct(loggedIn.getCart().getId(), productId);
-        } catch (InvalidProductException | InvalidCartException e) {
-            return "redirect:/cart";
+
+        } catch (ProductAlreadyInCartException e) {
+            redirectAttributes.addFlashAttribute("productAlreadyInCart", "This product is already in your cart.");
+            redirectAttributes.addFlashAttribute("productId", productId);
+            return "redirect:/products/browse";
         }
         return "redirect:/cart";
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/removeItem/{productId}")
-    public String removeFromCart(@PathVariable("productId") Long productId, Principal principal) {
-        try {
-            User loggedIn = userService.getUser(principal.getName());
-            cartService.removeProduct(loggedIn.getCart().getId(), productId);
-        } catch (InvalidProductException | InvalidCartException e) {
-            return "redirect:/cart";
-        }
+    public String removeFromCart(@PathVariable("productId") Long productId,
+                                 Principal principal) {
+        User loggedIn = userService.getUser(principal.getName());
+        cartService.removeProduct(loggedIn.getCart().getId(), productId);
+
         return "redirect:/cart";
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/emptyCart/{cartId}")
     public String emptyCart(@PathVariable("cartId") long cartId) {
-        try {
-            cartService.removeAll(cartId);
-        } catch (InvalidCartException e) {
-            return "error";
-        }
+        cartService.removeAll(cartId);
+
         return "redirect:/cart";
     }
 }

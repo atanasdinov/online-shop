@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import project.exception.InvalidCartException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import project.exception.CheckoutEmptyCartException;
+import project.exception.QuantityNotAvailableException;
 import project.model.entities.Sale;
 import project.service.specification.CartService;
 import project.service.specification.ProductService;
@@ -37,9 +39,10 @@ public class SalesController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/purchase")
-    public String purchaseItems(Model model){
+    public String purchaseItems(Model model) {
         List<Sale> allSales = saleService.getAllSales();
         model.addAttribute("sales", allSales);
+
         return "purchase";
     }
 
@@ -49,15 +52,24 @@ public class SalesController {
                            @RequestParam("price") List<String> price,
                            @RequestParam("productId") List<String> productId,
                            @RequestParam("productQuantity") List<String> productQuantity,
-                           Principal principal) throws InvalidCartException {
-
+                           RedirectAttributes redirectAttributes,
+                           Principal principal) {
         try {
             saleService.add(principal.getName(), productName, price, productId, productQuantity);
-        } catch (ClassCastException | IllegalArgumentException e){
-            return "error";
+        } catch (CheckoutEmptyCartException e) {
+            return "redirect:/cart";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("invalidQuantity", "You must enter a valid quantity!");
+
+            return "redirect:/cart";
+        } catch (QuantityNotAvailableException e) {
+            redirectAttributes.addFlashAttribute("invalidQuantity", "Selected quantity is not available!");
+
+            return "redirect:/cart";
         }
+
         cartService.removeAll(userService.getUser(principal.getName()).getCart().getId());
 
-        return "redirect:/home";
+        return "redirect:/success";
     }
 }

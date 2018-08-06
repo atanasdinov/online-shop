@@ -19,39 +19,39 @@
             </a>
 
             <div style="width: 30%;text-align: right;">
-                <div sec:authorize="isAnonymous()" style="float: right">
+                <div sec:authorize="isAnonymous()" style="float: right; margin-left: 5px;" >
                     <a class="navbar-toggler" th:href="@{/user/register}">Sign up</a>
                     <a class="navbar-toggler" th:href="@{/user/login}">Sign in</a>
                 </div>
 
-                <div sec:authorize="hasRole('USER')" style="float: right">
+                <div sec:authorize="hasRole('USER')" style="float: right; margin-left: 5px;">
                     <a class="navbar-toggler" th:href="@{/cart}">Cart</a>
                 </div>
 
-                <div sec:authorize="hasRole('ADMIN')" style="float: right">
+                <div sec:authorize="hasRole('ADMIN')" style="float: right; margin-left: 5px;">
                     <a class="navbar-toggler" th:href="@{/products/create}">Create Product</a>
                 </div>
 
-                <div sec:authorize="permitAll" style="float: right">
+                <div  sec:authorize="permitAll">
                     <a class="navbar-toggler" th:href="@{/home}">Homepage
                     </a>
                 </div>
 
-                <div sec:authorize="isAuthenticated()" style="float: right">
+                <div sec:authorize="isAuthenticated()" style="float: right; margin-left: 5px;">
                     <a class="navbar-toggler" th:href="@{/user/logout}">Logout</a>
                 </div>
+
             </div>
         </div>
 
         <div sec:authorize="permitAll" style="float: right" >
-            <form th:action="@{/products/search}" method="post">
+            <form th:action="@{/products/search}" method="post" >
                 <input type="search" name="search">
                 <button class="btn btn-primary btn-sm " type="submit">
                     Search
                 </button>
             </form>
         </div>
-
     </div>
 
 </header>
@@ -61,41 +61,23 @@
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row">
-                <div class="card mb-4 box-shadow" th:each="product : ${productList}" th:object="${product}">
+                <div class="card mb-4 box-shadow" th:each="product : ${foundProducts}" th:object="${product}">
                     <img class="card-img-top"
                          data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail"
                          alt="Card image cap">
                     <div class="card-body">
                         <ul>
-                            <th:block th:if="${productAlreadyInCart!=null}">
-                                <th:block th:if="${productId}==*{id}">
-                                    <p style="color: #d9534f" th:text="${productAlreadyInCart}"></p>
-                                </th:block>
-                            </th:block>
                             <li><p th:text="|Category: *{categoryName} |"></li>
                             <li><p th:text="|Name: *{name} |"></li>
                             <li><p th:text="|Price: *{price} |"></li>
-                            <li sec:authorize="hasRole('ADMIN')"><p th:text="|Quantity: *{quantity} |"></li>
                         </ul>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <th:block th:if="*{quantity != 0}">
-                                    <form th:action="@{/cart/addItem/{productId}(productId=*{id})}"
-                                          sec:authorize="hasRole('USER')" method="post">
-                                        <button type="submit" class="btn btn-default btn-sm">
-                                            <span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart
-                                        </button>
-                                    </form>
-                                </th:block>
-                                <th:block th:if="*{quantity == 0}">
-                                    <p sec:authorize="hasRole('USER')" style="color: #d9534f">
-                                        Product not currently available!
-                                    </p>
-                                </th:block>
-                                <form th:action="@{/products/edit/{productId}(productId=*{id})}" method="get">
-                                    <input type="submit" class="btn btn-default btn-sm" sec:authorize="hasRole('ADMIN')"
-                                           value="Edit Product">
-                                    </input>
+                                <form th:action="@{/cart/addItem/{productId}(productId=*{id})}"
+                                      sec:authorize="hasRole('USER')" method="post">
+                                    <button type="submit" class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart
+                                    </button>
                                 </form>
                                 <form th:action="@{/products/remove/{productId}(productId=*{id})}" method="post">
                                     <input type="submit" class="btn btn-default btn-sm" sec:authorize="hasRole('ADMIN')"

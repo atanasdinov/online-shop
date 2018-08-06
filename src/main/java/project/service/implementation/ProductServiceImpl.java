@@ -3,6 +3,7 @@ package project.service.implementation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.exception.ProductAlreadyExistsException;
 import project.model.DTOS.ProductDTO;
 import project.model.entities.Category;
 import project.model.entities.Product;
@@ -29,9 +30,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void add(ProductDTO productDTO) {
-        if (productDTO.getCategoryName() == null)
-            throw new NullPointerException("Category name must not be null!");
+    public void add(ProductDTO productDTO) throws ProductAlreadyExistsException{
+        if(productRepository.doesExist(productDTO.getName()))
+            throw new ProductAlreadyExistsException("Product already exists!");
 
         if (!categoryRepository.doesExist(productDTO.getCategoryName()))
             categoryRepository.persist(new Category(productDTO.getCategoryName()));
@@ -43,19 +44,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean removeProductById(long id) {
-        if (id < 1)
-            throw new NullPointerException("Product name must not be null!");
+    public void editProduct(long id, ProductDTO productDTO, long categoryId) {
+        productRepository.edit(id, productDTO, categoryId);
+    }
 
+    @Override
+    public boolean removeProductById(long id) {
         productRepository.delete(id);
         return false;
     }
 
     @Override
     public ProductDTO getProductById(long productId) {
-        if (productId < 1)
-            throw new NullPointerException("Product name must not be null");
-
         Product product = productRepository.get(productId);
         return modelMapper.map(product, ProductDTO.class);
     }
@@ -71,10 +71,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getAllProductsFromCategory(String categoryName) {
-        if (categoryName == null)
-            throw new NullPointerException("category name must not be null");
-
         List<Product> products = productRepository.getAllProductsByCategory(categoryName);
+        List<ProductDTO> productDTOS = new ArrayList<>();
+        for (Product product : products)
+            productDTOS.add(modelMapper.map(product, ProductDTO.class));
+
+        return productDTOS;
+    }
+
+    @Override
+    public List<ProductDTO> foundProducts(String searchedBy) {
+        List<Product> products = this.productRepository.productsMatching(searchedBy);
         List<ProductDTO> productDTOS = new ArrayList<>();
         for (Product product : products)
             productDTOS.add(modelMapper.map(product, ProductDTO.class));

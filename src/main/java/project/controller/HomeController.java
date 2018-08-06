@@ -1,5 +1,6 @@
 package project.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -14,7 +15,7 @@ import java.security.Principal;
 @RequestMapping("/")
 public class HomeController {
 
-    @GetMapping({"", "/home"})
+    @GetMapping({"", "home"})
     public String index(Model model,
                         @CookieValue(value = "token", required = false) Cookie cookie,
                         Principal principal) {
@@ -24,13 +25,21 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/contact")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("contact")
     public String contact() {
         return "contact";
     }
 
-    @GetMapping("/thanks")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("thanks")
     public String thanks() {
         return "thanks";
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("success")
+    public String success() {
+        return "purchase-success";
     }
 }

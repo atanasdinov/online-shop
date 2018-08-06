@@ -2,7 +2,7 @@ package project.model.DTOS;
 
 public class CategoryDTO {
 
-    private int id;
+    private long id;
     private String name;
 
     public CategoryDTO() {
@@ -12,7 +12,7 @@ public class CategoryDTO {
         this.name = name;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

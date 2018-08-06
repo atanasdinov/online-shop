@@ -35,7 +35,6 @@ public class UserController {
     @GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("user", new UserRegisterDTO());
-        model.addAttribute("usernameDuplication", null);
         return "register";
     }
 
@@ -63,8 +62,7 @@ public class UserController {
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("user", new UserLoginDTO());
-        model.addAttribute("userNotFound", null);
-        model.addAttribute("incorrectPassword", null);
+
         return "login";
     }
 

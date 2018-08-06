@@ -2,6 +2,8 @@ package project.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.exception.CheckoutEmptyCartException;
+import project.exception.QuantityNotAvailableException;
 import project.model.entities.Sale;
 import project.repository.specification.ProductRepository;
 import project.repository.specification.SaleRepository;
@@ -22,26 +24,42 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public void add(String username, List<String> productNames, List<String> prices, List<String> productsId, List<String> productsQuantity) {
+    public void add(String username, List<String> productNames, List<String> prices, List<String> productsId, List<String> productsQuantity)
+            throws IllegalArgumentException, QuantityNotAvailableException, CheckoutEmptyCartException {
+        boolean flag = true;
+
+        if(productNames.isEmpty())
+            throw new CheckoutEmptyCartException("Empty cart!");
+
         for (int i = 0; i < productNames.size(); i++) {
             String productName = productNames.get(i);
             Double price = Double.parseDouble(prices.get(i));
             Long productId = Long.parseLong(productsId.get(i));
             try {
                 Integer productQuantity = Integer.parseInt(productsQuantity.get(i));
-                if(productQuantity >= 0 && productQuantity <= productRepository.get(productId).getQuantity()) {
-                    productRepository.decreaseQuantity(productId, productQuantity);
-                    saleRepository.persist(username, productName, price*productQuantity, productQuantity);
+                if (productQuantity <= 0) {
+                    flag = false;
+                    throw new IllegalArgumentException("Quantity must be valid!");
                 }
-                else{
-                    throw new IllegalArgumentException("Invalid quantity");
+                if (productQuantity > productRepository.get(productId).getQuantity()) {
+                    flag = false;
+                    throw new QuantityNotAvailableException("Quantity not available!");
                 }
-            } catch (ClassCastException e) {
-                throw new ClassCastException("Quantity must be positive number");
             } catch (IllegalArgumentException iae) {
-                throw new IllegalArgumentException("quantity must be positive");
+                throw new IllegalArgumentException("Quantity must be valid!");
             }
+        }
 
+        if (flag) {
+            for (int i = 0; i < productNames.size(); i++) {
+                String productName = productNames.get(i);
+                Double price = Double.parseDouble(prices.get(i));
+                Long productId = Long.parseLong(productsId.get(i));
+                Integer productQuantity = Integer.parseInt(productsQuantity.get(i));
+
+                productRepository.decreaseQuantity(productId, productQuantity);
+                saleRepository.persist(username, productName, price * productQuantity, productQuantity);
+            }
         }
     }
 
