@@ -56,8 +56,8 @@ public class ProductController {
         } catch (ProductAlreadyExistsException e) {
             redirectAttributes.addFlashAttribute("productExists", "Product already exists!");
             return "redirect:/products/create";
-
         }
+
         return "redirect:/products/browse";
     }
 
@@ -89,9 +89,9 @@ public class ProductController {
             productService.editProduct(id, productDTO, categoryDTO.getId());
         } catch (NoResultException e) {
             redirectAttributes.addFlashAttribute("invalidCategoryName", "Category name does not exist!");
-
             return "redirect:/products/edit/{id}";
         }
+
         return "redirect:/products/browse";
     }
 

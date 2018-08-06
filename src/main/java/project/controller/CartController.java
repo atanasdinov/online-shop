@@ -61,7 +61,6 @@ public class CartController {
         User loggedIn = userService.getUser(principal.getName());
         try {
             cartService.addProduct(loggedIn.getCart().getId(), productId);
-
         } catch (ProductAlreadyInCartException e) {
             redirectAttributes.addFlashAttribute("productAlreadyInCart", "This product is already in your cart.");
             redirectAttributes.addFlashAttribute("productId", productId);
