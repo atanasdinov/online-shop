@@ -89,7 +89,7 @@
                                 </th:block>
                                 <th:block th:if="*{quantity == 0}">
                                     <p sec:authorize="hasRole('USER')" style="color: #d9534f">
-                                        Product not currently available!
+                                        Out of stock!
                                     </p>
                                 </th:block>
                                 <form th:action="@{/products/edit/{productId}(productId=*{id})}" method="get">

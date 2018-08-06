@@ -60,11 +60,9 @@ public class SalesController {
             return "redirect:/cart";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("invalidQuantity", "You must enter a valid quantity!");
-
             return "redirect:/cart";
         } catch (QuantityNotAvailableException e) {
             redirectAttributes.addFlashAttribute("invalidQuantity", "Selected quantity is not available!");
-
             return "redirect:/cart";
         }
 

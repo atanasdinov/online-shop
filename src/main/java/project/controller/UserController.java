@@ -82,11 +82,11 @@ public class UserController {
             model.addAttribute("incorrectPassword", "Incorrect password!");
             return "login";
         }
+
         if(!userService.login(userLoginDTO, response))
             return "redirect:/user/login?error";
-        else{
+        else
             return "redirect:/home";
-        }
 
     }
 
