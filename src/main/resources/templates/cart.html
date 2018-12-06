@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"  >
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/request-quantity.js}" type="text/javascript"></script>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-8">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <h5><span class="glyphicon glyphicon-shopping-cart"></span> Shopping Cart</h5>
+                            </div>
+
+                            <form method="get" th:action="@{/products/browse/1}">
+                                <div class="col-xs-6">
+                                    <button type="submit" class="btn btn-primary btn-sm btn-block">
+                                        <span class="glyphicon glyphicon-share-alt"></span> Continue shopping
+                                    </button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <div th:each="product : ${cart.products}" th:object="${product}" >
+                        <div class="row">
+                            <div class="col-xs-2"><img class="img-responsive" src="http://placehold.it/100x70">
+                            </div>
+                            <div class="col-xs-2">
+                                <h4><small>Product name</small></h4>
+                                <h4 class="product-name"><p th:text="*{name}"></p></h4>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="col-xs-2">
+                                    <h4><small>Product price</small></h4>
+                                    <h4><p th:text="*{price}"></p></h4>
+                                </div>
+                                <div class="col-xs-2">
+                                    <form th:action="@{/cart/removeItem/{productId}(productId=*{id})}" method="post">
+                                        <h4><small>Remove product</small></h4>
+                                        <button type="submit" class="btn btn-link btn-xs">
+                                            <span class="glyphicon glyphicon-trash"> </span>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col-xs-2">
+                                    <h4><small>Select quantity</small></h4>
+                                    <p></p>
+                                    <h4><input style="width: 104px; height: 26px;" class="quantity" type="text" id="inputQuantity"/></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <th:block th:if="${emptyCart!=null}">
+                            <p style="color: #d9534f" th:text="${emptyCart}"></p>
+                    </th:block>
+                        <div class="row">
+                            <div class="text-center">
+                                <div class="col-xs-3">
+                                    <form th:action="@{/cart/emptyCart/{cartId}(cartId=${cart.id})}" method="post" >
+                                        <input type="submit" class="btn btn-default btn-sm" value="Empty cart">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    <hr>
+                    <div class="panel-footer">
+                        <div class="row text-center">
+
+                            <div class="col-xs-9">
+                                    <p class="text-right" style="color: #d9534f" id="error"></p>
+                            </div>
+
+                            <div class="col-xs-9">
+                                <h4 class="text-right">Total: <p th:text="${cart.totalPrice}"></p></h4>
+                            </div>
+
+                                <form method="post" th:action="@{/sales/purchase}" th:object="${cart}" id="submitForm" >
+                                    <th:block th:if="*{!products.isEmpty()}">
+                                        <div th:each="product, itemStat : *{products}"  >
+                                            <input type="hidden" th:field="*{products[__${itemStat.index}__].name}" >
+                                            <input type="hidden" th:field="*{products[__${itemStat.index}__].price}">
+                                            <input type="hidden" th:field="*{products[__${itemStat.index}__].id}" >
+                                            <input type="hidden" th:field="*{products[__${itemStat.index}__].category}" >
+                                            <input type="hidden" th:field="*{products[__${itemStat.index}__].availableQuantity}" >
+                                        </div>
+                                    </th:block>
+                                     <th:block th:if="*{products.isEmpty()}">
+                                        <div th:object="${product}" th:value="null">
+                                        </div>
+                                    </th:block>
+
+                                    <div class="col-xs-3">
+                                        <button class="btn btn-success btn-block" id="checkout">
+                                            Checkout
+                                        </button>
+                                    </div>
+                                </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
+

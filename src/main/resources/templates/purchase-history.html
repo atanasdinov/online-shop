@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Purchase</title>
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link th:href = "@{/css/grid.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <div class="container">
+
+        <h1>List of purchased products</h1>
+        <p class="lead">Purchase details:</p>
+        <div align="right">
+            <a th:href="@{/home}"><h2>Home</h2></a>
+        </div>
+
+        <hr>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Purchase ID</th>
+                <th>Username</th>
+                <th>Product name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total Price</th>
+            </tr>
+            </thead>
+
+            <div th:each="sale : ${sales}" th:object="${sale}">
+                <tbody>
+                <tr>
+                    <td><p th:text="*{id}"></p></td>
+                    <td><p th:text="*{username}"></p></td>
+                    <td><p th:text="*{productName}"></p></td>
+                    <td><p th:text="*{quantity}"></p></td>
+                    <td><p th:text="|*{price} lv.|"></p></td>
+                    <td><p th:text="|*{totalPrice} lv.|"></p></td>
+                </tr>
+                </tbody>
+            </div>
+        </table>
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Token Expired!</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+</head>
+<body>
+    <div align="center">
+        <h1 class="display-3">Your email validation link has expired!</h1>
+
+        <form th:action="@{/user/resendRegistrationConfirmation}" method="get">
+                <input type="hidden" name="username" th:value="${username}">
+                <input value="Resend" type="submit">
+        </form>
+
+        <hr>
+        <p>
+            Want to tell us something else? <a th:href="@{/contact}">Contact us</a>
+        </p>
+    </div>
+</body>
+</html>

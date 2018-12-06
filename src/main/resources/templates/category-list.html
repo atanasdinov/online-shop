@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Purchase</title>
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link th:href = "@{/css/grid.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="container">
+
+    <h1>List of categories</h1>
+    <p class="lead">Purchase details:</p>
+    <div align="right">
+        <a th:href="@{/home}"><h2>Home</h2></a>
+    </div>
+
+    <form sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')" th:action="@{/category/create}" method="get">
+        <input type="submit" value="Create new category">
+    </form>
+
+    <hr>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Category name</th>
+            <th>Products</th>
+            <div sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')">
+                <th>Category Management</th>
+            </div>
+        </tr>
+        </thead>
+
+        <div th:each="category : ${categories}" th:object="${category}">
+            <tbody>
+            <tr>
+                <td><p th:text="*{name}"></p></td>
+                <form th:action="@{/category/showProducts}" method="post">
+                    <input type="hidden" name="categoryId" th:value="*{id}">
+                    <td><input type="submit" value="Show products"></td>
+                </form>
+                <div sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')">
+                    <td>
+                        <form th:action="@{/category/edit/{categoryId}(categoryId=*{id})}" method="get">
+                            <input type="submit" value="Edit">
+                        </form>
+
+                        <form th:action="@{/category/remove/{categoryId}(categoryId=*{id})}" method="post">
+                            <input type="submit" value="Delete">
+                        </form>
+                    </td>
+                </div>
+            </tr>
+            </tbody>
+        </div>
+    </table>
+
+
+
+
+
+</div>
+</body>
+</html>

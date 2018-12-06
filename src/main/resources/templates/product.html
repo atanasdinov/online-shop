@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Browse</title>
+    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+
+<body>
+<header>
+
+    <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="container d-flex justify-content-between">
+            <a style="width: 70%;" th:href="@{/products/browse/1}" class="navbar-brand d-flex align-items-center">
+                <strong>Browse products</strong>
+            </a>
+
+            <div style="width: 30%;text-align: right;">
+                <div sec:authorize="isAnonymous()" style="float: right">
+                    <a class="navbar-toggler" th:href="@{/user/register}">Sign up</a>
+                    <a class="navbar-toggler" th:href="@{/user/login}">Sign in</a>
+                </div>
+
+                <div sec:authorize="hasAnyRole('USER','MODERATOR')" style="float: right">
+                    <a class="navbar-toggler" th:href="@{/cart}">Cart</a>
+                </div>
+
+                <div sec:authorize="hasAnyRole('ADMIN','MODERATOR')" style="float: right">
+                    <a class="navbar-toggler" th:href="@{/products/create}">Create Product</a>
+                </div>
+
+                <div sec:authorize="permitAll" style="float: right">
+                    <a class="navbar-toggler" th:href="@{/home}">Homepage
+                    </a>
+                </div>
+
+                <div sec:authorize="isAuthenticated()" style="float: right">
+                    <a class="navbar-toggler" th:href="@{/user/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <div sec:authorize="permitAll" style="float: right" >
+            <form th:action="@{/products/search}" method="post">
+                <input type="search" name="keyword">
+                <button class="btn btn-primary btn-sm " type="submit">
+                    Search
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+</header>
+
+<main role="main" style="text-align:center;">
+    <h2 th:text="${product.name}"></h2>
+    <hr>
+
+    <img class="card-img-top" style="width:200px; height:200px" th:src="*{product.image}" alt="Card image cap">
+
+    <hr/>
+    <h3>Comments:</h3>
+        <th:block th:if="${emptyComment!=null}">
+            <p style="color: #d9534f" th:text="${emptyComment}"></p>
+        </th:block>
+
+        <th:block th:each="comment : ${product.comments}" th:object="${comment}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="panel panel-white post panel-shadow">
+                            <div class="post-heading">
+                                <div class="pull-left image">
+                                    <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
+                                </div>
+                                <div class="pull-left meta">
+                                    <div class="title h5">
+                                        <a href="#"><b th:text="*{user.getUsername()}"></b></a>
+                                        made a post.
+                                    </div>
+                                    <h6 class="text-muted time">Unknown time ago</h6>
+                                </div>
+                            </div>
+                            <div class="post-description">
+                                <p th:text="*{message}"></p>
+                                <div class="stats">
+                                    <a href="#" class="btn btn-default stat-item">
+                                        <i class="fa fa-thumbs-up icon"></i>Like
+                                    </a>
+                                    <a href="#" class="btn btn-default stat-item">
+                                        <i class="fa fa-thumbs-down icon"></i>Dislike
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form th:action="@{/products/comment/delete/{id}(id=*{id})}" method="post">
+                        <input type="hidden" name="productId" th:value="${product.id}">
+                        <input type="submit" class="btn btn-default btn-sm" sec:authorize="hasAnyRole('ADMIN','MODERATOR')" value="Delete Comment">
+                    </form>
+
+                </div>
+            </div>
+        </th:block>
+
+    <form sec:authorize="isAuthenticated()" th:action="@{/products/comment/send}" method="post">
+        <textarea style="margin-top=20px" type="text" name="message" rows="4" cols="50"></textarea><br/>
+        <input type="hidden" name="productId" th:value="${product.id}">
+        <button type="submit">Send</button>
+    </form>
+
+</main>
+
+<footer class="text-muted">
+    <div class="container">
+        <p class="float-right">
+            <a href="#">Back to top</a>
+        </p>
+        <p>ScaleShop</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/popper.min.js"></script>
+<script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
+<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/holder.min.js"></script>
+</body>
+</html>

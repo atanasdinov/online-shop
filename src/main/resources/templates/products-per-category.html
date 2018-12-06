@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Browse</title>
+    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link th:href = "@{/images}" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<header>
+
+    <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="container d-flex justify-content-between">
+            <a style="width: 70%;" href="/products/browse/1" class="navbar-brand d-flex align-items-center">
+                <strong>Browse products</strong>
+            </a>
+
+            <div style="width: 30%;text-align: right;">
+                <div sec:authorize="isAnonymous()" style="float: right">
+                    <a class="navbar-toggler" th:href="@{/user/register}">Sign up</a>
+                    <a class="navbar-toggler" th:href="@{/user/login}">Sign in</a>
+                </div>
+
+                <div sec:authorize="hasAnyRole('USER','MODERATOR')" style="float: right">
+                    <a class="navbar-toggler" th:href="@{/cart}">Cart</a>
+                </div>
+
+                <div sec:authorize="hasAnyRole('ADMIN','MODERATOR')" style="float: right">
+                    <a class="navbar-toggler" th:href="@{/products/create}">Create Product</a>
+                </div>
+
+                <div sec:authorize="permitAll" style="float: right">
+                    <a class="navbar-toggler" th:href="@{/home}">Homepage
+                    </a>
+                </div>
+
+                <div sec:authorize="permitAll" style="float: right">
+                    <a class="navbar-toggler" th:href="@{/category/all}">Category List</a>
+                </div>
+
+                <div sec:authorize="isAuthenticated()" style="float: right">
+                    <a class="navbar-toggler" th:href="@{/user/logout}">Logout</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div  sec:authorize="permitAll" style="float: right">
+            <form th:action="@{/products/search}" method="post">
+                <input type="search" name="keyword">
+                <button class="btn btn-primary btn-sm " type="submit">
+                    Search
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+</header>
+
+<main role="main">
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div style="width:200px; margin-right:10px" class="card mb-4 box-shadow" th:each="product : ${products}" th:object="${product}">
+
+                    <img class="card-img-top" style="width:200px; height:200px" th:src="*{image}" alt="Card image cap">
+
+                    <div class="card-body">
+                        <ul>
+                            <th:block th:if="${productAlreadyInCart!=null}">
+                                <th:block th:if="${productId}==*{id}">
+                                    <p style="color: #d9534f" th:text="${productAlreadyInCart}"></p>
+                                </th:block>
+                            </th:block>
+                            <li><p th:text="|Category: *{category.getName()} |"></li>
+                            <li><p th:text="|Name: *{name} |"></li>
+                            <li><p th:text="|Price: *{price} |"></li>
+                            <li sec:authorize="hasAnyRole('ADMIN','MODERATOR')"><p th:text="|Quantity: *{availableQuantity} |"></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <th:block th:if="*{availableQuantity != 0}">
+                                    <form th:action="@{/cart/addItem/{productId}(productId=*{id})}"
+                                          sec:authorize="hasAnyRole('USER','MODERATOR')" method="post">
+                                        <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+                                        <button type="submit" class="btn btn-default btn-sm" id="addToCart">
+                                            <span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart
+                                        </button>
+                                    </form>
+                                </th:block>
+                                <th:block th:if="*{availableQuantity == 0}">
+                                    <p sec:authorize="hasAnyRole('USER','MODERATOR')" style="color: #d9534f">
+                                        Out of stock!
+                                    </p>
+                                </th:block>
+                                <form th:action="@{/products/edit/{productId}(productId=*{id})}" method="get">
+                                    <input type="submit" class="btn btn-default btn-sm" sec:authorize="hasAnyRole('ADMIN','MODERATOR')" value="Edit Product">
+                                </form>
+                                <form th:action="@{/products/remove/{productId}(productId=*{id})}" method="post">
+                                    <input type="submit" class="btn btn-default btn-sm" sec:authorize="hasAnyRole('ADMIN','MODERATOR')" value="Delete Product">
+                                </form>
+                            </div>
+                        </div>
+                        <a th:href="@{/products/view/{id}(id=*{id})}">See more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+
+<footer class="text-muted">
+    <div class="container">
+        <p class="float-right">
+            <a href="#">Back to top</a>
+        </p>
+        <p>ScaleShop</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/popper.min.js"></script>
+<script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
+<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/holder.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Edit category</title>
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link th:href = "@{/css/signup.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body class="text-center">
+<form class="form-signup" th:action="@{/category/edit/{id}(id=${category.id})}" th:object="${category}" method="post">
+    <h1 class="h3 mb-3 font-weight-normal">Edit category</h1>
+
+    <p></p>
+
+    <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'has-danger'">
+        <th:block th:if="${#fields.hasErrors('name')}" th:each="e : ${#fields.errors('name')}">
+            <p style="color: #d9534f" th:text="${e}"></p>
+        </th:block>
+        <label class="sr-only">Name</label>
+        <input type="text" class="form-control" placeholder="Name" th:field="*{name}" autofocus>
+    </div>
+
+    <p></p>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button>
+</form>
+</body>
+</html>

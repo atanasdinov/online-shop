@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Edit product</title>
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link th:href = "@{/css/signup.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body class="text-center">
+    <form class="form-signup" th:action="@{/products/edit/{id}(id=${product.id})}" th:object="${product}" method="post" enctype="multipart/form-data">
+        <h1 class="h3 mb-3 font-weight-normal">Edit product</h1>
+
+        <th:block th:if="${invalidCategoryName!=null}">
+            <p style="color: #d9534f" th:text="${invalidCategoryName}"></p>
+        </th:block>
+
+
+        <label class="sr-only">Category</label>
+        <input type="text" class="form-control"  th:field="*{category.name}">
+
+        <p></p>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'has-danger'">
+            <th:block th:if="${#fields.hasErrors('name')}" th:each="e : ${#fields.errors('name')}">
+                <p style="color: #d9534f" th:text="${e}"></p>
+            </th:block>
+            <label class="sr-only">Name</label>
+            <input type="text" class="form-control" placeholder="Name" th:field="*{name}" autofocus>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('availableQuantity')}? 'has-danger'">
+            <th:block th:if="${#fields.hasErrors('availableQuantity')}" th:each="e : ${#fields.errors('availableQuantity')}">
+                <p style="color: #d9534f" th:text="${e}"></p>
+            </th:block>
+            <label class="sr-only">Quantity</label>
+            <input type="text" class="form-control" placeholder="Quantity" th:field="*{availableQuantity}">
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('price')}? 'has-danger'">
+            <th:block th:if="${#fields.hasErrors('price')}" th:each="e : ${#fields.errors('price')}">
+                <p style="color: #d9534f" th:text="${e}"></p>
+            </th:block>
+            <label class="sr-only">Price</label>
+            <input type="text" class="form-control" placeholder="Price" th:field="*{price}">
+        </div>
+
+        <div class="form-group" >
+            <label for="inputFile" class="sr-only">File to upload:</label>
+            <input type="file" id="inputFile" placeholder="File" th:field="*{file}" >
+        </div>
+        <p></p>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button>
+    </form>
+</body>
+</html>

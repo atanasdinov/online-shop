@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Register</title>
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link th:href = "@{/css/signup.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body class="text-center">
+<form class="form-signup" th:action="@{/user/register}" th:object="${user}" method="post" >
+    <h1 class="h3 mb-3 font-weight-normal">Sign up for ScaleShop!</h1>
+
+    <div class="form-container">
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('email')}? 'has-danger'">
+            <th:block th:if="${emailDuplication!=null}">
+                <p style="color: #d9534f" th:text="${emailDuplication}"></p>
+            </th:block>
+            <label for="inputEmail" class="sr-only">Email</label>
+            <input type="text" th:field="*{email}" id="inputEmail" class="form-control" placeholder="Email" autofocus>
+            <th:block th:if="${#fields.hasErrors('email')}" th:each="e : ${#fields.errors('email')}">
+                <p style="color: #d9534f" th:text="${e}"></p>
+            </th:block>
+        </div>
+
+        <p></p>
+        <div class="form-group" th:classappend="${#fields.hasErrors('username')}? 'has-danger'">
+            <th:block th:if="${usernameDuplication!=null}">
+                <p style="color: #d9534f" th:text="${usernameDuplication}"></p>
+            </th:block>
+            <label for="inputUsername" class="sr-only">Username</label>
+            <input type="text" id="inputUsername" class="form-control" placeholder="Username" th:field="*{username}">
+            <th:block th:if="${#fields.hasErrors('username')}" th:each="e : ${#fields.errors('username')}">
+                <p style="color: #d9534f" th:text="${e}"></p>
+            </th:block>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('password')}? 'has-danger'">
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" th:field="*{password}">
+            <th:block th:if="${#fields.hasErrors('password')}" th:each="error : ${#fields.errors('password')}">
+                <p style="color: #d9534f" th:text="${error}"></p>
+            </th:block>
+        </div>
+        <p></p>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('firstName')}? 'has-danger'">
+            <label for="inputFirstName" class="sr-only">First name</label>
+            <input type="text" id="inputFirstName" class="form-control" placeholder="First Name" th:field="*{firstName}">
+            <th:block th:if="${#fields.hasErrors('firstName')}" th:each="e : ${#fields.errors('firstName')}">
+                <p style="color: #d9534f" th:text="${e}"></p>
+            </th:block>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('lastName')}? 'has-danger'">
+            <label for="inputLastName" class="sr-only">Last name</label>
+            <input type="text" id="inputLastName" class="form-control" placeholder="Last Name" th:field="*{lastName}">
+            <th:block th:if="${#fields.hasErrors('lastName')}" th:each="e : ${#fields.errors('lastName')}">
+                <p style="color: #d9534f" th:text="${e}"></p>
+            </th:block>
+        </div>
+
+
+        <label for="inputAddress" class="sr-only">Address</label>
+        <input type="text" id="inputAddress" class="form-control" placeholder="Address" th:field="*{address}" >
+
+        <p></p>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+</form>
+</body>
+</html>

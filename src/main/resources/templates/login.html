@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sign in</title>
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link th:href = "@{/css/signin.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body class="text-center">
+<form class="form-signin" method="post" th:action="@{/user/login}">
+
+    <img style="width:250px; height:250xp" src="https://www.exactax.com/track/img/hr.png">
+    <p></p>
+    <p></p>
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+    <th:block th:if="${accountNotValidated!=null}">
+        <p style="color: #d9534f" th:text="${accountNotValidated}"></p>
+    </th:block>
+    <th:block th:if="${userNotFound!=null}">
+        <p style="color: #d9534f" th:text="${userNotFound}"></p>
+    </th:block>
+    <th:block th:if="${incorrectPassword!=null}">
+        <p style="color: #d9534f" th:text="${incorrectPassword}"></p>
+    </th:block>
+    <label for="inputUsername" class="sr-only">Username</label>
+    <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+</form>
+
+</body>
+</html>
+
