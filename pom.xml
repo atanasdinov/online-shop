@@ -16,25 +16,25 @@
         <version>2.0.3.RELEASE</version>
     </parent>
 
-    <repositories>
-        <repository>
-            <id>snapshots</id>
-            <url>http://10.0.5.100:8081/artifactory/libs-snapshot-local</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>snapshots</id>-->
+            <!--<url>http://10.0.5.100:8081/artifactory/libs-snapshot-local</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>snapshots</id>
-            <url>http://10.0.5.100:8081/artifactory/plugins-snapshot-local</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </pluginRepository>
-    </pluginRepositories>
+    <!--<pluginRepositories>-->
+        <!--<pluginRepository>-->
+            <!--<id>snapshots</id>-->
+            <!--<url>http://10.0.5.100:8081/artifactory/plugins-snapshot-local</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+        <!--</pluginRepository>-->
+    <!--</pluginRepositories>-->
 
     <dependencies>
         <dependency>
@@ -131,11 +131,11 @@
             <artifactId>jolokia-core</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.scalefocus</groupId>
-            <artifactId>common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.scalefocus</groupId>-->
+            <!--<artifactId>common</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>javax.xml.bind</groupId>
@@ -209,6 +209,12 @@
             <!--<scope>test</scope>-->
         <!--</dependency>-->
 
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+        </dependency>
 
     </dependencies>
 

@@ -28,6 +28,7 @@ import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -123,7 +124,7 @@ public class UserService {
      * @param user    who receives the email.
      * @param request the web request.
      */
-    public void sendActivationEmail(User user, WebRequest request) {
+    private void sendActivationEmail(User user, WebRequest request) {
         String appUrl = request.getContextPath();
         eventPublisher.publishEvent(new EmailSenderEvent(user, request.getLocale(), appUrl));
         logger.info("Activation email sent.");
@@ -179,12 +180,12 @@ public class UserService {
      * @param user
      * @return generated token.
      */
-    public String addToken(User user) {
+    private String addToken(User user) {
         SecureRandom random = new SecureRandom();
         byte[] bytes = new byte[20];
 
         random.nextBytes(bytes);
-        String token = bytes.toString();
+        String token = Arrays.toString(bytes);
 
         userRepository.setToken(token, user);
         logger.info("Token set for user.");

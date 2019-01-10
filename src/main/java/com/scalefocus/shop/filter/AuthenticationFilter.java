@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -59,7 +60,7 @@ public class AuthenticationFilter implements Filter {
         if (cookie != null)
             token = cookie.getValue();
         else
-            logger.warn("No cookie: " + cookie);
+            logger.warn("No cookie");
 
         User user = userService.checkToken(token);
         UsernamePasswordAuthenticationToken auth = null;
@@ -69,7 +70,7 @@ public class AuthenticationFilter implements Filter {
             roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName()));
             auth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), roles);
         } else
-            logger.warn("No token: " + user);
+            logger.warn("No token");
 
         SecurityContext ctx = SecurityContextHolder.createEmptyContext();
         SecurityContextHolder.setContext(ctx);
@@ -77,7 +78,7 @@ public class AuthenticationFilter implements Filter {
         if (auth != null)
             ctx.setAuthentication(auth);
         else
-            logger.warn("No auth: " + auth);
+            logger.warn("No auth");
 
         filterChain.doFilter(request, response);
     }

@@ -15,6 +15,7 @@ import com.scalefocus.shop.repository.specification.CommentRepository;
 import com.scalefocus.shop.repository.specification.ProductRepository;
 import com.scalefocus.shop.repository.specification.UserRepository;
 import com.scalefocus.shop.service.sftp.SftpClient;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class ProductService {
     private CommentRepository commentRepository;
     private UserRepository userRepository;
 
-    private Category defaultCategory = null;
+    private Category defaultCategory;
 
     private static final int PAGE_SIZE = 15;
 
@@ -78,7 +79,7 @@ public class ProductService {
         if (bindingResult.hasErrors())
             throw new InvalidProductDataException("Invalid product data!", productData, bindingResult, ProductAction.CREATE);
 
-        if (productData.getFile().getOriginalFilename().isEmpty())
+        if (StringUtils.isEmpty(productData.getFile().getOriginalFilename()))
             throw new ImageNotUploadedException("Image not selected!", productData);
 
         addProduct(productData);
@@ -89,10 +90,10 @@ public class ProductService {
      *
      * @param productData contains product data
      */
-    public void addProduct(Product productData) {
+    private void addProduct(Product productData) {
         Product product;
 
-        if (productData.getCategory() == null || productData.getCategory().getName().equals("")) {
+        if(productData.getCategory() == null || StringUtils.isEmpty(productData.getCategory().getName())) {
             product = new Product(defaultCategory, productData.getPrice(), productData.getName(), productData.getAvailableQuantity(), productData.getFile().getOriginalFilename());
         } else {
             try {
@@ -128,7 +129,7 @@ public class ProductService {
 
         Product product = productRepository.getProduct(productData.getId());
 
-        if (!productData.getFile().getOriginalFilename().isEmpty()) {
+        if (!StringUtils.isEmpty(productData.getFile().getOriginalFilename())) {
             if (!productRepository.pictureIsBoundToMoreThanOneProduct(product.getPictureName()))
                 sftpClient.deleteFile(product.getPictureName());
 
@@ -188,7 +189,7 @@ public class ProductService {
      * @param productId the id of the product
      */
     public void addComment(String username, String message, String productId) {
-        if (message == "")
+        if (message.equals(StringUtils.EMPTY))
             throw new EmptyCommentException("Empty comment!", productId);
 
         User user = userRepository.getUser(username);

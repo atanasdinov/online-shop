@@ -2,6 +2,7 @@ package com.scalefocus.shop.service.sftp;
 
 import com.jcraft.jsch.*;
 import com.scalefocus.shop.service.ProductService;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,11 @@ public class SftpClient {
     private String destinationPath;
 
     @Autowired
-    Environment env;
+    private Environment env;
 
     private void configureSftp() {
         serverAddress = env.getProperty(SFTP_HOST);
-        serverPort = Integer.parseInt(env.getProperty(SFTP_PORT));
+        serverPort = NumberUtils.toInt(env.getProperty(SFTP_PORT));
         username = env.getProperty(SFTP_USERNAME);
         password = env.getProperty(SFTP_PASSWORD);
         destinationPath = env.getProperty(SFTP_DESTINATION_PATH);
@@ -70,11 +71,7 @@ public class SftpClient {
 
             channelSftp.disconnect();
             session.disconnect();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        } catch (JSchException e) {
-            logger.error(e.getMessage());
-        } catch (SftpException e) {
+        } catch (IOException | JSchException | SftpException e) {
             logger.error(e.getMessage());
         } finally {
             if (channelSftp != null && channelSftp.isConnected())
@@ -117,11 +114,7 @@ public class SftpClient {
 
             channelSftp.disconnect();
             session.disconnect();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        } catch (JSchException e) {
-            logger.error(e.getMessage());
-        } catch (SftpException e) {
+        } catch (IOException | JSchException | SftpException e) {
             logger.error(e.getMessage());
         } finally {
             if (channelSftp != null && channelSftp.isConnected())
@@ -157,9 +150,7 @@ public class SftpClient {
             channelSftp.disconnect();
             session.disconnect();
 
-        } catch (JSchException e) {
-            logger.error(e.getMessage());
-        } catch (SftpException e) {
+        } catch (JSchException | SftpException e) {
             logger.error(e.getMessage());
         } finally {
             if (channelSftp != null && channelSftp.isConnected())

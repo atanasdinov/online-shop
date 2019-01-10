@@ -106,13 +106,11 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .setParameter("quantity", productData.getAvailableQuantity())
                     .executeUpdate();
 
-        Optional<String> pictureName = Optional.ofNullable(productData.getPictureName());
-
-        if (pictureName.isPresent())
-            em.createNativeQuery("update products set picture_name=:pictureName where id=:id", Product.class)
-                    .setParameter("id", productData.getId())
-                    .setParameter("pictureName", pictureName.get())
-                    .executeUpdate();
+        Optional.ofNullable(productData.getPictureName())
+                .ifPresent(s -> em.createNativeQuery("update products set picture_name=:pictureName where id=:id", Product.class)
+                        .setParameter("id", productData.getId())
+                        .setParameter("pictureName", s)
+                        .executeUpdate());
     }
 
     @Override
@@ -146,7 +144,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         String sql = "select * from products where category_id = ? order by id";
         List<Product> productList = new ArrayList<>();
 
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, new Object[]{categoryId});
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, categoryId);
         for (Map<String, Object> row : rows) {
             Product product = new Product();
             product.setId((Long) row.get("id"));
@@ -174,7 +172,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         String sql = "select * from products where name like ?";
         List<Product> productList = new ArrayList<>();
 
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, new Object[]{"%" + keyword + "%"});
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, "%" + keyword + "%");
         for (Map<String, Object> row : rows) {
             Product product = new Product();
             product.setId((Long) row.get("id"));
@@ -211,7 +209,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         String sql = "select * from products order by id limit ? offset ?";
         List<Product> productList = new ArrayList<>();
 
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, new Object[]{pageSize, (pageNumber - 1) * pageSize});
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, pageSize, (pageNumber - 1) * pageSize);
         for (Map<String, Object> row : rows) {
             Product product = new Product();
             product.setId((Long) row.get("id"));
@@ -232,10 +230,8 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .setParameter("pictureName", pictureName)
                 .getResultList();
 
-        if(result.size() > 1)
-            return true;
+        return result.size() > 1;
 
-        return false;
     }
 
 }

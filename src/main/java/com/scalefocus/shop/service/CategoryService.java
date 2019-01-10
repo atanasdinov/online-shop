@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <b>This service declares all manipulations that can be done to a {@link Category}</b>
@@ -106,20 +107,19 @@ public class CategoryService {
      * @param categoryId id of the category
      */
     public void removeCategory(long categoryId) {
-        List<Product> productsByCategory = productRepository.getAllProductsByCategory(categoryId);
+        List<Product> products = productRepository.getAllProductsByCategory(categoryId);
 
-        for (Product product : productsByCategory) {
-            if (!productRepository.pictureIsBoundToMoreThanOneProduct(product.getPictureName())) {
-                sftpClient.deleteFile(product.getPictureName());
-                logger.info("Picture deleted from remote server.");
-            }
+        products.forEach(product -> {
+            Optional.of(product)
+                    .filter(p -> !productRepository.pictureIsBoundToMoreThanOneProduct(p.getPictureName()))
+                    .ifPresent(p -> {
+                        sftpClient.deleteFile(p.getPictureName());
+                        logger.info("Picture deleted from remote server.");
+                    });
 
             productRepository.deleteProduct(product.getId());
             logger.info("Product deleted.");
-        }
-
-        categoryRepository.deleteCategory(categoryId);
-        logger.info("Category deleted.");
+        });
     }
 
     /**

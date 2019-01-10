@@ -1,7 +1,6 @@
 package com.scalefocus.shop.service;
 
-import com.scalefocus.common.ProductDTO;
-import com.scalefocus.common.ProductMessageDTO;
+import com.scalefocus.shop.exception.CategoryNotFoundException;
 import com.scalefocus.shop.exception.CheckoutEmptyCartException;
 import com.scalefocus.shop.exception.InvalidQuantityException;
 import com.scalefocus.shop.exception.QuantityNotAvailableException;
@@ -12,16 +11,19 @@ import com.scalefocus.shop.repository.specification.CartRepository;
 import com.scalefocus.shop.repository.specification.ProductRepository;
 import com.scalefocus.shop.repository.specification.SaleRepository;
 import com.scalefocus.shop.repository.specification.UserRepository;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.jms.Queue;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * <b>This service declares all Sales-related manipulations and actions.</b>
@@ -56,29 +58,28 @@ public class SaleService {
      *
      * @param username      username of the user
      * @param cart          the user's cart
-     * @param quantityArray array with requested quantities for every product
+     * @param quantities array with requested quantities for every product
      */
-    public void addSale(String username, Cart cart, String[] quantityArray) {
-        List<Product> products = cart.getProducts();
+    public void addSale(String username, Cart cart, String[] quantities) {
 
-        if (products.isEmpty())
-            throw new CheckoutEmptyCartException("Empty cart!");
+        Optional.ofNullable(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Empty username!"));
 
-        int[] validQuantities = validateQuantities(quantityArray, products);
+        List<Product> requestedProducts = Optional.ofNullable(cart.getProducts())
+                .orElseThrow(() -> new CheckoutEmptyCartException("Empty cart!"));
 
-        for (int i = 0; i < products.size(); i++) {
-            Product product = products.get(i);
-            int requestedQuantity = validQuantities[i];
-            products.get(i).setRequestedQuantity(requestedQuantity);
-            saleRepository.addSale(username, product);
-            logger.info("Sale submitted.");
-            productRepository.decreaseQuantity(product.getId(), requestedQuantity);
-            logger.info("Product's quantity decreased.");
-        }
+        Optional.of(requestedProducts)
+                .map(products -> validateQuantities(quantities, products))
+                .ifPresent(products -> products.forEach(product -> {
+                    saleRepository.addSale(username, product);
+                    logger.debug("Sale submitted.");
+                    productRepository.decreaseQuantity(product.getId(), product.getRequestedQuantity());
+                    logger.debug("Product's quantity decreased.");
+                }));
 
         cartRepository.removeAllProducts(userRepository.getUser(username).getCart().getId());
 
-        sendProductMessage(username, products);
+        //sendProductMessage(username, products);
     }
 
     /**
@@ -90,6 +91,7 @@ public class SaleService {
         return saleRepository.getAllSales();
     }
 
+
     /**
      * This method is used to ensure that the input data for quantities is valid.
      *
@@ -97,55 +99,51 @@ public class SaleService {
      * @param requestedProducts list of the requested products
      * @return array of int numbers
      */
-    private int[] validateQuantities(String[] quantities, List<Product> requestedProducts) {
-        int[] productQuantities = new int[quantities.length];
-        int requestedQuantity;
-        int i = 0;
+    private List<Product> validateQuantities(String[] quantities, List<Product> requestedProducts) {
+        return requestedProducts.stream()
+                .peek(product -> {
+                    Integer requestedQuantity = Optional.of(quantities[requestedProducts.indexOf(product)])
+                            .map(NumberUtils::toInt)
+                            .filter(quantity -> quantity > NumberUtils.INTEGER_ZERO)
+                            .orElseThrow(() -> new InvalidQuantityException("Quantity must be valid!"));
 
-        for (String quantity : quantities) {
-            try {
-                productQuantities[i] = Integer.parseInt(quantity);
+                    Optional.of(requestedQuantity)
+                            .filter(reqQuantity -> {
+                                Integer availableQuantity = Optional.ofNullable(productRepository.getProduct(product.getId()))
+                                        .map(Product::getAvailableQuantity)
+                                        .orElseThrow(() -> new CategoryNotFoundException("asd"));
 
-                requestedQuantity = productQuantities[i];
-                if (requestedQuantity <= 0)
-                    throw new InvalidQuantityException("Quantity must be valid!");
+                                return reqQuantity < availableQuantity;
+                            })
+                            .orElseThrow(() -> new QuantityNotAvailableException("Quantity not available!"));
 
-                Product product = requestedProducts.get(i);
-                Integer availableQuantity = productRepository.getProduct(product.getId()).getAvailableQuantity();
-                if (requestedQuantity > availableQuantity)
-                    throw new QuantityNotAvailableException("Quantity not available!");
+                    product.setRequestedQuantity(requestedQuantity);
+                })
+                .collect(Collectors.toList());
 
-                i++;
-            } catch (IllegalArgumentException e) {
-                throw new InvalidQuantityException("Quantity must be valid!");
-            }
-        }
-
-        return productQuantities;
-    }
-
-    /**
-     * This method converts objects and maps them as ProductMessageDTO which is after that sent with ActiveMQ.
-     *
-     * @param username the user who made the order
-     * @param products list of the purchased products
-     */
-    private void sendProductMessage(String username, List<Product> products) {
-        List<ProductDTO> productDTOList = new ArrayList<>();
-
-        for (Product product : products) {
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setId(product.getId());
-            productDTO.setCategoryName(product.getCategory().toString());
-            productDTO.setName(product.getName());
-            productDTO.setPrice(product.getPrice());
-            productDTO.setQuantity(product.getRequestedQuantity());
-            productDTOList.add(productDTO);
-        }
-
-        ProductMessageDTO productMessageDTO = new ProductMessageDTO(username, productDTOList);
-
-        jmsTemplate.convertAndSend(queue, productMessageDTO);
-        logger.info("Product message sent!");
+//    /**
+//     * This method converts objects and maps them as ProductMessageDTO which is after that sent with ActiveMQ.
+//     *
+//     * @param username the user who made the order
+//     * @param products list of the purchased products
+//     */
+//    private void sendProductMessage(String username, List<Product> products) {
+//        List<ProductDTO> productDTOList = new ArrayList<>();
+//
+//        for (Product product : products) {
+//            ProductDTO productDTO = new ProductDTO();
+//            productDTO.setId(product.getId());
+//            productDTO.setCategoryName(product.getCategory().toString());
+//            productDTO.setName(product.getName());
+//            productDTO.setPrice(product.getPrice());
+//            productDTO.setQuantity(product.getRequestedQuantity());
+//            productDTOList.add(productDTO);
+//        }
+//
+//        ProductMessageDTO productMessageDTO = new ProductMessageDTO(username, productDTOList);
+//
+//        jmsTemplate.convertAndSend(queue, productMessageDTO);
+//        logger.info("Product message sent!");
+//    }
     }
 }

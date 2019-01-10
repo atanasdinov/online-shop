@@ -2,7 +2,6 @@ package com.scalefocus.shop.camel.route;
 
 import com.scalefocus.shop.camel.ProductFromCSV;
 import com.scalefocus.shop.camel.processor.CamelCSVProcessor;
-import com.scalefocus.shop.service.ProductService;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.dataformat.bindy.csv.BindyCsvDataFormat;
@@ -20,7 +19,7 @@ public class CamelCSVRoute extends RouteBuilder {
     private static final Logger logger = LoggerFactory.getLogger(CamelCSVRoute.class);
 
     @Autowired
-    private ProductService productService;
+    private CamelCSVProcessor camelCSVProcessor;
 
     /**
      * {@inheritDoc}
@@ -39,6 +38,6 @@ public class CamelCSVRoute extends RouteBuilder {
                 .streaming()
                 .parallelProcessing(true)
                 .unmarshal(bindy)
-                .process(new CamelCSVProcessor(productService));
+                .process(camelCSVProcessor);
     }
 }

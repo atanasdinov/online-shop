@@ -1,5 +1,7 @@
 package com.scalefocus.shop.utility;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
@@ -38,7 +40,7 @@ public class ScriptRunner {
         this.stopOnError = stopOnError;
     }
 
-    public void setDelimiter(String delimiter, boolean fullLineDelimiter) {
+    private void setDelimiter(String delimiter, boolean fullLineDelimiter) {
         this.delimiter = delimiter;
         this.fullLineDelimiter = fullLineDelimiter;
     }
@@ -71,9 +73,7 @@ public class ScriptRunner {
             } finally {
                 connection.setAutoCommit(originalAutoCommit);
             }
-        } catch (IOException e) {
-            throw e;
-        } catch (SQLException e) {
+        } catch (IOException | SQLException e) {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException("Error running script.  Cause: " + e, e);
@@ -95,7 +95,7 @@ public class ScriptRunner {
 
         try {
             LineNumberReader lineReader = new LineNumberReader(reader);
-            String line = null;
+            String line;
 
             while ((line = lineReader.readLine()) != null) {
                 if (command == null)
@@ -122,11 +122,10 @@ public class ScriptRunner {
                         if (line == null)
                             break;
 
-                        trimmedLine = line.trim();
                     }
 
-                    command.append(line.substring(0, line.lastIndexOf(getDelimiter())));
-                    command.append(" ");
+                    command.append(line, 0, line.lastIndexOf(getDelimiter()));
+                    command.append(StringUtils.SPACE);
 
                     Statement statement = conn.createStatement();
 
@@ -201,26 +200,17 @@ public class ScriptRunner {
                         if (line == null)
                             break;
 
-                        trimmedLine = line.trim();
                     }
 
                     command.append(line);
-                    command.append(" ");
+                    command.append(StringUtils.SPACE);
                 }
             }
 
             if (!autoCommit)
                 conn.commit();
 
-        } catch (SQLException e) {
-            e.fillInStackTrace();
-
-            printlnError("Error executing: " + command);
-            printlnError(e);
-
-            throw e;
-
-        } catch (IOException e) {
+        } catch (SQLException | IOException e) {
             e.fillInStackTrace();
 
             printlnError("Error executing: " + command);
