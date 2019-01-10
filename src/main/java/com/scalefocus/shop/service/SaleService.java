@@ -1,9 +1,6 @@
 package com.scalefocus.shop.service;
 
-import com.scalefocus.shop.exception.CategoryNotFoundException;
-import com.scalefocus.shop.exception.CheckoutEmptyCartException;
-import com.scalefocus.shop.exception.InvalidQuantityException;
-import com.scalefocus.shop.exception.QuantityNotAvailableException;
+import com.scalefocus.shop.exception.*;
 import com.scalefocus.shop.model.entity.Cart;
 import com.scalefocus.shop.model.entity.Product;
 import com.scalefocus.shop.model.entity.Sale;
@@ -111,7 +108,7 @@ public class SaleService {
                             .filter(reqQuantity -> {
                                 Integer availableQuantity = Optional.ofNullable(productRepository.getProduct(product.getId()))
                                         .map(Product::getAvailableQuantity)
-                                        .orElseThrow(() -> new CategoryNotFoundException("asd"));
+                                        .orElseThrow(() -> new ProductNotFoundException("Product not found!"));
 
                                 return reqQuantity < availableQuantity;
                             })

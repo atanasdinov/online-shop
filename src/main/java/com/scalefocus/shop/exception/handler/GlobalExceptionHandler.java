@@ -206,4 +206,11 @@ public class GlobalExceptionHandler {
 
         return "redirect:/category/create";
     }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public String handleProductNotFound(ProductNotFoundException e) {
+        logger.error(e.getMessage());
+
+        return "redirect:/cart";
+    }
 }
